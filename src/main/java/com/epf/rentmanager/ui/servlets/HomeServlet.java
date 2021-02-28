@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.service.ReservationService;
 import com.epf.rentmanager.service.VehicleService;
 
 
@@ -18,13 +19,17 @@ import com.epf.rentmanager.service.VehicleService;
 public class HomeServlet extends HttpServlet{
 	private VehicleService vehicleService = VehicleService.getInstance();
 	private ClientService clientService = ClientService.getInstance();
+	private ReservationService reservationService = ReservationService.getInstance();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/home.jsp");
 			request.setAttribute("nbOfVehicles", vehicleService.nbOfVehicle());
-			request.setAttribute("nbOfVehicles", );
+			request.setAttribute("nbOfUtilisateurs", clientService.nbOfClient());
+			request.setAttribute("nbOfReservations", reservationService.nbOfResa());
+			
 			requestDispatcher.forward(request, response);
+			
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
