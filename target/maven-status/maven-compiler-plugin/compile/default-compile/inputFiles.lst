@@ -3,7 +3,9 @@
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/model/Reservation.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/UiReservation.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/HomeServlet.java
+/home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/UserListServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/persistence/ConnectionManager.java
+/home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/UserCreateServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/dao/ReservationDao.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/dao/ClientDao.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/dao/VehicleDao.java

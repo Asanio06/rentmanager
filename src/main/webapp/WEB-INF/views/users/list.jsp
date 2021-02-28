@@ -14,8 +14,8 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Utilisateurs
-                <a class="btn btn-primary" href="${pageContext.request.contextPath}/users/create">Ajouter</a>
+                Clients
+                <a class="btn btn-primary" href="${pageContext.request.contextPath}/clients/create">Ajouter</a>
             </h1>
         </section>
 
@@ -33,6 +33,27 @@
                                     <th>Email</th>
                                     <th>Action</th>
                                 </tr>
+
+                                <c:forEach items="${Clients}" var="client">
+                                <tr>
+                                    <td>${client.id}.</td>
+                                    <td>${client.nom}</td>
+                                    <td>${client.prenom}</td>
+                                    <td>${client.email}</td>
+                                    <!--<td>John Doe</td>-->
+                                    <td>
+                                        <a class="btn btn-primary disabled" href="car-detail.html">
+                                            <i class="fa fa-play"></i>
+                                        </a>
+                                        <a class="btn btn-success disabled" href="#">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-danger disabled" href="#">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </c:forEach>
                                 <tr>
                                     <td>1.</td>
                                     <td>John</td>

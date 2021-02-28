@@ -31,8 +31,8 @@
             <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Utilisateurs</span>
-              <span class="info-box-number">${nbOfUtilisateurs}</span>
+              <span class="info-box-text">Clients</span>
+              <span class="info-box-number">${nbOfClients}</span>
             </div>
             <!-- /.info-box-content -->
           </div>

@@ -25,11 +25,11 @@ public class HomeServlet extends HttpServlet{
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/home.jsp");
 			request.setAttribute("nbOfVehicles", vehicleService.nbOfVehicle());
-			request.setAttribute("nbOfUtilisateurs", clientService.nbOfClient());
+			request.setAttribute("nbOfClients", clientService.nbOfClient());
 			request.setAttribute("nbOfReservations", reservationService.nbOfResa());
 			
 			requestDispatcher.forward(request, response);
-			
+			 
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
