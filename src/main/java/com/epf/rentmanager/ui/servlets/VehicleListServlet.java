@@ -21,6 +21,7 @@ public class VehicleListServlet extends HttpServlet{
 		RequestDispatcher requestDispacher = request.getRequestDispatcher("/WEB-INF/views/vehicles/list.jsp");
 
 		try {
+			
 			request.setAttribute("vehicles", vehicleService.findAll());
 
 		} catch (ServiceException e) {
