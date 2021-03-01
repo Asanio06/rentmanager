@@ -23,6 +23,7 @@ public class HomeServlet extends HttpServlet{
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
+			
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/home.jsp");
 			request.setAttribute("nbOfVehicles", vehicleService.nbOfVehicle());
 			request.setAttribute("nbOfClients", clientService.nbOfClient());
