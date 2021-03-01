@@ -80,7 +80,7 @@ public class ReservationService {
 
 	}
 	
-	public long nbOfResa() throws ServiceException {
+	public int nbOfResa() throws ServiceException {
 		try {
 			return reservationDao.nbOfResa();
 		} catch (DaoException e) {

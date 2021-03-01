@@ -170,16 +170,16 @@ public class ClientDao {
 
 	}
 	
-	public long nbOfClient() throws DaoException {
+	public int nbOfClient() throws DaoException {
 		try {
-			long nbOfClient = 0;
+			int nbOfClient = 0;
 
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement ps = connection.prepareStatement(COUNT_CLIENT_QUERY);
 			ResultSet resultSet = ps.executeQuery();
 
 			if (resultSet.next()) {
-				nbOfClient = resultSet.getLong("count");
+				nbOfClient = resultSet.getInt("count");
 			}
 			
 			resultSet.close();

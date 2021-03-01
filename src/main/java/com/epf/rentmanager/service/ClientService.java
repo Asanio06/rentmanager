@@ -109,7 +109,7 @@ public class ClientService {
 		}
 	}
 	
-	public long nbOfClient() throws ServiceException {
+	public int nbOfClient() throws ServiceException {
 		try {
 			return clientDao.nbOfClient();
 		} catch (DaoException e) {

@@ -97,7 +97,7 @@ public class VehicleService {
 
 	}
 	
-	public long nbOfVehicle() throws ServiceException {
+	public int nbOfVehicle() throws ServiceException {
 		try {
 			return vehicleDao.nbOfVehicle();
 		} catch (DaoException e) {

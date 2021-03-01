@@ -176,17 +176,17 @@ public class ReservationDao {
 		 
 	}
 	
-	public long nbOfResa() throws DaoException {
+	public int nbOfResa() throws DaoException {
 		try {
 			
-			long nbOfResa = 0;
+			int nbOfResa = 0;
 
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement ps = connection.prepareStatement(COUNT_RESERVATION_QUERY);
 			ResultSet resultSet = ps.executeQuery();
 
 			if (resultSet.next()) {
-				nbOfResa = resultSet.getLong("count");
+				nbOfResa = resultSet.getInt("count");
 			}
 			
 			resultSet.close();

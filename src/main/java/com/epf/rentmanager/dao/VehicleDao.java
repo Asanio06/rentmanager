@@ -172,16 +172,16 @@ public class VehicleDao {
 
 	}
 
-	public long nbOfVehicle() throws DaoException {
+	public int nbOfVehicle() throws DaoException {
 		try {
-			long nbOfVehicle = 0;
+			int nbOfVehicle = 0;
 
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement ps = connection.prepareStatement(COUNT_VEHICLE_QUERY);
 			ResultSet resultSet = ps.executeQuery();
 
 			if (resultSet.next()) {
-				nbOfVehicle = resultSet.getLong("count");
+				nbOfVehicle = resultSet.getInt("count");
 			}
 			
 			resultSet.close();
@@ -192,7 +192,6 @@ public class VehicleDao {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
 			throw new DaoException();
 		}
 	}
