@@ -34,6 +34,8 @@
                                     <th>Fin</th>
                                     <th>Action</th>
                                 </tr>
+
+
                                 <tr>
                                     <td>1.</td>
                                     <td>Renault Clio</td>
@@ -53,14 +55,15 @@
                                     </td>
                                 </tr>
 
+                                <c:forEach items="${Reservations}" var="reservation">
                                 <tr>
-                                    <td>2.</td>
-                                    <td>Citroen C2</td>
-                                    <td>Jane Doe</td>
-                                    <td>10/01/2019</td>
-                                    <td>13/01/2019</td>
+                                    <td>${reservation.id}.</td>
+                                    <td>${reservation.}</td>
+                                    <td>${reservation.}</td>
+                                    <td>${reservation.}</td>
+                                    <!--<td>John Doe</td>-->
                                     <td>
-                                        <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=2">
+                                        <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/clients?id=1">
                                             <i class="fa fa-play"></i>
                                         </a>
                                         <a class="btn btn-success disabled" href="#">
@@ -71,6 +74,9 @@
                                         </a>
                                     </td>
                                 </tr>
+                                </c:forEach>
+
+                            
                             </table>
                         </div>
                         <!-- /.box-body -->

@@ -50,10 +50,11 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="naissance" class="col-sm-2 control-label">Email</label>
+                                    <label for="naissance" class="col-sm-2 control-label">Date de naissance</label>
 
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="date" value="2011-08-19" id="example-date-input">                                    </div>
+                                        <input class="form-control" type="date">                                    
+                                    </div>
                                 </div>
                             </div>
                             <!-- /.box-body -->
