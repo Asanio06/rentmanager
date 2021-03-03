@@ -35,7 +35,7 @@ public class VehicleDao {
 	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicule SET constructeur = ?, modele = ?, nb_places = ? WHEREid = ?;";
 	private static final String COUNT_VEHICLE_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
 	private static final String FIND_DISTINCT_VEHICLES_RESA_BY_CLIENT_QUERY =
-			"SELECT  DISTINCT Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
+			"SELECT  DISTINCT Vehicle.id,Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
@@ -185,8 +185,10 @@ public class VehicleDao {
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement ps = connection.prepareStatement(FIND_VEHICLES_QUERY);
+			PreparedStatement ps = connection.prepareStatement(FIND_DISTINCT_VEHICLES_RESA_BY_CLIENT_QUERY);
+			ps.setLong(1, client.getId());
 			ResultSet resultSet = ps.executeQuery();
+			
 			while (resultSet.next()) {
 				Vehicle vehicle = new Vehicle();
 				vehicle.setId(resultSet.getLong("id"));
