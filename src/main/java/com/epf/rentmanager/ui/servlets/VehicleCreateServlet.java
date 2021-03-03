@@ -35,7 +35,7 @@ public class VehicleCreateServlet extends HttpServlet{
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
-		response.sendRedirect(request.getServerName()+":"+request.getServerPort()+ request.getContextPath()+"/cars");
+		response.sendRedirect("http://localhost:8080/rentmanager/cars");
 		
 	}
 }

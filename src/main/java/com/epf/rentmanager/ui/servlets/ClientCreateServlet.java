@@ -32,15 +32,16 @@ public class ClientCreateServlet extends HttpServlet{
 			client.setNom(request.getParameter("last_name"));
 			client.setPrenom(request.getParameter("first_name"));
 			client.setEmail(request.getParameter("email"));
-			client.setNaissance(Date.valueOf("2001-01-01"));
+			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
 			clientService.create(client);
+			response.sendRedirect("http://localhost:8080/rentmanager/clients");
 			
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
 		
-		response.sendRedirect(request.getServerName()+":"+request.getServerPort()+ request.getContextPath()+ "/clients");
+		
 		
 	}
 

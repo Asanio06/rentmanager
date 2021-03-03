@@ -31,6 +31,7 @@
                                     <th>Nom</th>
                                     <th>Prenom</th>
                                     <th>Email</th>
+                                    <th>Date de naissance</th>
                                     <th>Action</th>
                                 </tr>
 
@@ -40,6 +41,7 @@
                                     <td>${client.nom}</td>
                                     <td>${client.prenom}</td>
                                     <td>${client.email}</td>
+                                    <td>${client.naissance}</td>
                                     <!--<td>John Doe</td>-->
                                     <td>
                                         <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/clients?id=1">

@@ -53,7 +53,7 @@
                                     <label for="naissance" class="col-sm-2 control-label">Date de naissance</label>
 
                                     <div class="col-sm-10">
-                                        <input class="form-control" type="date">                                    
+                                        <input class="form-control" type="date" name="naissance">                                    
                                     </div>
                                 </div>
                             </div>
