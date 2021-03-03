@@ -25,7 +25,8 @@
                     <!-- Horizontal Form -->
                     <div class="box">
                         <!-- form start -->
-                        <form class="form-horizontal" method="post">
+                        <form class="form-horizontal" method="post" >
+                            <input type="hidden" name="id" value="${client.id}">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="last_name" class="col-sm-2 control-label">Nom</label>

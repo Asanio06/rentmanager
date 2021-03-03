@@ -134,12 +134,13 @@ public class ClientDao {
 			ps.executeUpdate();
 			ps.close();
 			connection.close();
+			return true;
 
 		} catch (SQLException e) {
 			throw new DaoException(e.getMessage());
 
 		}
-		return true;
+		
 	}
 
 	public List<Client> findAll() throws DaoException {

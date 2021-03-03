@@ -46,7 +46,7 @@ public class ClientService {
 
 			return clientDao.create(client);
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la création de l'utilisateur dans la BDD");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
@@ -55,7 +55,7 @@ public class ClientService {
 		try {
 			return clientDao.delete(client);
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur lors de la suppression de l'utilisateur dans la BDD");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -69,7 +69,7 @@ public class ClientService {
 
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
-			throw new ServiceException("Problème au niveau de la BDD");
+			throw new ServiceException(e.getMessage());
 		}
 
 	}
@@ -90,7 +90,7 @@ public class ClientService {
 			return client;
 
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur au niveau de la recherche dans la BDD");
+			throw new ServiceException(e.getMessage());
 
 		}
 
@@ -104,7 +104,7 @@ public class ClientService {
 			return clientDao.findAll();
 
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur au niveau de la recherche dans la BDD");
+			throw new ServiceException(e.getMessage());
 
 		}
 	}

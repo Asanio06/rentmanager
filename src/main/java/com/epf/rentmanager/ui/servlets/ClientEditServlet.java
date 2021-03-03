@@ -1,6 +1,7 @@
 package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
+import java.sql.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -32,6 +33,26 @@ public class ClientEditServlet extends HttpServlet{
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
+		
+	}
+	
+	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+			try {
+				Client client = new Client();
+				client.setId(Long.parseLong(request.getParameter("id")));
+				client.setNom(request.getParameter("last_name"));
+				client.setPrenom(request.getParameter("first_name"));
+				client.setEmail(request.getParameter("email"));
+				client.setNaissance(Date.valueOf(request.getParameter("naissance")));
+				clientService.updateClient(client);
+				response.sendRedirect("http://localhost:8080/rentmanager/clients");
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				System.out.print(e.getMessage());
+			}
 		
 	}
 
