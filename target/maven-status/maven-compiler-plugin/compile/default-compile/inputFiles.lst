@@ -7,6 +7,7 @@
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/UiClient.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/persistence/FillDatabase.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/model/Client.java
+/home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/ClientDeleteServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/exception/DaoException.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/VehicleCreateServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/utils/IOUtils.java
