@@ -58,9 +58,10 @@
                                 <c:forEach items="${Reservations}" var="reservation">
                                 <tr>
                                     <td>${reservation.id}.</td>
-                                    <td>${reservation.}</td>
-                                    <td>${reservation.}</td>
-                                    <td>${reservation.}</td>
+                                    <td>${reservation.vehicle.modele}</td>
+                                    <td>${reservation.client.nom}</td>
+                                    <td>${reservation.debut}</td>
+                                    <td>${reservation.fin}</td>
                                     <!--<td>John Doe</td>-->
                                     <td>
                                         <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/clients?id=1">

@@ -30,7 +30,7 @@ public class UI {
 			UiVehicle.action_vehicle();
 			break;
 		case 3: 
-			UiReservation.action_reservation();
+			//UiReservation.action_reservation();
 			break;
 			
 		default:

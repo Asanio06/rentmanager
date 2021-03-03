@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
@@ -19,6 +20,7 @@ public class ReservationDao {
 
 	private static ReservationDao instance = null;
 	private ReservationDao() {}
+	
 	public static ReservationDao getInstance() {
 		if(instance == null) {
 			instance = new ReservationDao();
@@ -28,10 +30,36 @@ public class ReservationDao {
 	
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
-	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = "SELECT id, vehicle_id, debut, fin FROM Reservation WHERE client_id=?;";
-	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = "SELECT id, client_id, debut, fin FROM Reservation WHERE vehicle_id=?;";
-	private static final String FIND_RESERVATIONS_QUERY = "SELECT id, client_id, vehicle_id, debut, fin FROM Reservation;";
+	
+	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = 
+			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id"
+			+ "WHERE Reservation.Client.id = ?;";
+	
+	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = 
+			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id"
+			+ "WHERE Reservation.vehicle_id=?;";
+	
+	private static final String FIND_RESERVATIONS_QUERY = 
+			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id";
+	
 	private static final String COUNT_RESERVATION_QUERY = "SELECT COUNT(id) AS count FROM Reservation;";
+	
+	
 	public long create(Reservation reservation) throws DaoException {
 		
 		long id = 0;
@@ -40,8 +68,8 @@ public class ReservationDao {
 			
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement ps =connection.prepareStatement(CREATE_RESERVATION_QUERY,Statement.RETURN_GENERATED_KEYS);
-			ps.setLong(1, reservation.getClient_id());
-			ps.setLong(2, reservation.getVehicle_id());
+			ps.setLong(1, reservation.getClient().getId());
+			ps.setLong(2, reservation.getVehicle().getId());
 			ps.setDate(3, reservation.getDebut());
 			ps.setDate(4, reservation.getFin());
 			
@@ -57,7 +85,7 @@ public class ReservationDao {
 			
 			
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 			
 		}
 		
@@ -78,7 +106,7 @@ public class ReservationDao {
 			return nb_ligne_delete;
 			
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 			
 		}
 		
@@ -95,10 +123,26 @@ public class ReservationDao {
 			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATIONS_BY_CLIENT_QUERY);
 			ps.setLong(1,clientId);
 			ResultSet resultSet = ps.executeQuery();
+			
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
-				reservation.setClient_id(resultSet.getInt("client_id"));
-				reservation.setVehicle_id(resultSet.getInt("vehicle_id"));
+				
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+				
+				reservation.setClient(client);
+				
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+				
 				reservation.setDebut(resultSet.getDate("debut"));
 				reservation.setFin(resultSet.getDate("fin"));
 				
@@ -109,7 +153,7 @@ public class ReservationDao {
 			ps.close();
 			connection.close();
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 		
 		return list_reservation;
@@ -127,8 +171,22 @@ public class ReservationDao {
 			ResultSet resultSet = ps.executeQuery();
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
-				reservation.setClient_id(resultSet.getInt("client_id"));
-				reservation.setVehicle_id(resultSet.getInt("vehicle_id"));
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+				
+				reservation.setClient(client);
+				
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+				
 				reservation.setDebut(resultSet.getDate("debut"));
 				reservation.setFin(resultSet.getDate("fin"));
 				
@@ -139,7 +197,7 @@ public class ReservationDao {
 			ps.close();
 			connection.close();
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 		
 		return list_reservation;
@@ -157,8 +215,22 @@ public class ReservationDao {
 			ResultSet resultSet = ps.executeQuery();
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
-				reservation.setClient_id(resultSet.getInt("client_id"));
-				reservation.setVehicle_id(resultSet.getInt("vehicle_id"));
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+				
+				reservation.setClient(client);
+				
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+				
 				reservation.setDebut(resultSet.getDate("debut"));
 				reservation.setFin(resultSet.getDate("fin"));
 				
@@ -169,7 +241,7 @@ public class ReservationDao {
 			ps.close();
 			connection.close();
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 		
 		return list_reservation;
@@ -197,8 +269,7 @@ public class ReservationDao {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 	}
 }

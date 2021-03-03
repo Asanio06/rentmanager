@@ -56,7 +56,7 @@ public class ClientDao {
 			connection.close();
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 
@@ -77,7 +77,7 @@ public class ClientDao {
 			connection.close();
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 
 		return 1;
@@ -113,7 +113,7 @@ public class ClientDao {
 			return opt_client;
 		} catch (SQLException e) {
 			// System.out.print(e.getMessage());
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 
@@ -136,7 +136,7 @@ public class ClientDao {
 			connection.close();
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 		return true;
@@ -163,7 +163,7 @@ public class ClientDao {
 			ps.close();
 			connection.close();
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 
 		return list_client;
@@ -190,8 +190,7 @@ public class ClientDao {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 	}
 

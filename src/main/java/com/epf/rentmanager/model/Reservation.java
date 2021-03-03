@@ -4,8 +4,8 @@ import java.sql.Date;
 
 public class Reservation {
 	private long id;
-	private long client_id;
-	private long vehicle_id;
+	private Client client;
+	private Vehicle vehicle;
 	private Date debut;
 	private Date fin;
 	
@@ -13,22 +13,15 @@ public class Reservation {
 		
 	}
 	
-	public Reservation(long id, long client_id, long vehicle_id, Date debut, Date fin) {
-		super();
-		this.id = id;
-		this.client_id = client_id;
-		this.vehicle_id = vehicle_id;
-		this.debut = debut;
-		this.fin = fin;
-	}
 	
-	
-	
+
 	@Override
 	public String toString() {
-		return "Reservation [id=" + id + ", client_id=" + client_id + ", vehicle_id=" + vehicle_id + ", debut=" + debut
-				+ ", fin=" + fin + "]";
+		return "Reservation [id=" + id + ", client=" + client.getId() + ", vehicle=" + vehicle.getId() + ", debut=" + debut + ", fin="
+				+ fin + "]";
 	}
+
+
 
 	public long getId() {
 		return id;
@@ -36,24 +29,35 @@ public class Reservation {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public long getClient_id() {
-		return client_id;
+
+	public Client getClient() {
+		return client;
 	}
-	public void setClient_id(long client_id) {
-		this.client_id = client_id;
+
+	public void setClient(Client client) {
+		this.client = client;
 	}
-	public long getVehicle_id() {
-		return vehicle_id;
+
+
+	public Vehicle getVehicle() {
+		return vehicle;
 	}
-	public void setVehicle_id(long vehicle_id) {
-		this.vehicle_id = vehicle_id;
+
+
+
+	public void setVehicle(Vehicle vehicle) {
+		this.vehicle = vehicle;
 	}
+
+
+
 	public Date getDebut() {
 		return debut;
 	}
 	public void setDebut(Date debut) {
 		this.debut = debut;
 	}
+	
 	public Date getFin() {
 		return fin;
 	}

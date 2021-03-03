@@ -57,7 +57,7 @@ public class VehicleDao {
 			return id;
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 
@@ -80,7 +80,7 @@ public class VehicleDao {
 			return nb_ligne_update;
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 
@@ -100,7 +100,7 @@ public class VehicleDao {
 			return nb_ligne_delete;
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 
 		}
 
@@ -138,7 +138,7 @@ public class VehicleDao {
 			return opt_vehicle;
 
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 
 	}
@@ -165,7 +165,7 @@ public class VehicleDao {
 			ps.close();
 			connection.close();
 		} catch (SQLException e) {
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 
 		return list_vehicle;
@@ -192,7 +192,7 @@ public class VehicleDao {
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new DaoException();
+			throw new DaoException(e.getMessage());
 		}
 	}
 
