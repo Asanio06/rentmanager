@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="epf.AppTest" time="0.043" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="epf.AppTest" time="0.014" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="gnome"/>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
@@ -16,7 +16,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="FR"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/lansana/Documents/rentmanager/target/surefire/surefirebooter6126233755060161522.jar /home/lansana/Documents/rentmanager/target/surefire 2021-03-03T14-37-59_710-jvmRun1 surefire16813329075563270179tmp surefire_08119806294637012361tmp"/>
+    <property name="sun.java.command" value="/home/lansana/Documents/rentmanager/target/surefire/surefirebooter7912729557820885742.jar /home/lansana/Documents/rentmanager/target/surefire 2021-03-03T17-47-04_181-jvmRun1 surefire15457495575498963067tmp surefire_07277617713849191470tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/lansana/Documents/rentmanager/target/test-classes:/home/lansana/Documents/rentmanager/target/classes:/home/lansana/.m2/repository/junit/junit/3.8.1/junit-3.8.1.jar:/home/lansana/.m2/repository/com/h2database/h2/1.4.200/h2-1.4.200.jar:/home/lansana/.m2/repository/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1.jar:/home/lansana/.m2/repository/javax/annotation/javax.annotation-api/1.3.2/javax.annotation-api-1.3.2.jar:/home/lansana/.m2/repository/javax/servlet/jstl/1.2/jstl-1.2.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -32,7 +32,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/home/lansana/Documents/rentmanager/target/surefire/surefirebooter6126233755060161522.jar"/>
+    <property name="surefire.real.class.path" value="/home/lansana/Documents/rentmanager/target/surefire/surefirebooter7912729557820885742.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.10+9-Ubuntu-0ubuntu1.20.04"/>
     <property name="user.name" value="lansana"/>
@@ -57,5 +57,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="testApp" classname="epf.AppTest" time="0.003"/>
+  <testcase name="testApp" classname="epf.AppTest" time="0.001"/>
 </testsuite>

@@ -20,7 +20,7 @@
                     <!-- Profile Image -->
                     <div class="box box-primary">
                         <div class="box-body box-profile">
-                            <h3 class="profile-username text-center">John Doe (john.doe@epf.fr)</h3>
+                            <h3 class="profile-username text-center">${client.prenom} ${client.nom} (${client.email})</h3>
 
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
@@ -76,7 +76,7 @@
                                             <th style="width: 10px">#</th>
                                             <th>Modele</th>
                                             <th>Constructeur</th>
-                                            <th style=>Nombre de places</th>
+                                            <th>Nombre de places</th>
                                         </tr>
                                         <tr>
                                             <td>1.</td>

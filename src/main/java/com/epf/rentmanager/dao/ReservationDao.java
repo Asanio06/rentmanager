@@ -38,7 +38,7 @@ public class ReservationDao {
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
-			+ "WHERE Reservation.Client.id = ?;";
+			+ "WHERE Reservation.client_id = ?;";
 	
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = 
 			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "

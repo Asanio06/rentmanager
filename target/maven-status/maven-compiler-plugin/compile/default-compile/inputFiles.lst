@@ -16,6 +16,7 @@
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/dao/ClientDao.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/dao/VehicleDao.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/ReservationCreateServlet.java
+/home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/ClientDetailsServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/ui/servlets/ReservationListServlet.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/exception/ServiceException.java
 /home/lansana/Documents/rentmanager/src/main/java/com/epf/rentmanager/model/Vehicle.java

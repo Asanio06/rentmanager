@@ -77,7 +77,7 @@ public class VehicleService {
 			return vehicle;
 
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur au niveau de la recherche dans la BDD");
+			throw new ServiceException(e.getMessage());
 
 		}
 
@@ -91,7 +91,20 @@ public class VehicleService {
 			return vehicleDao.findAll();
 
 		} catch (DaoException e) {
-			throw new ServiceException("Erreur au niveau de la recherche dans la BDD");
+			throw new ServiceException(e.getMessage());
+
+		}
+
+	}
+	public List<Vehicle> findDistinctVehiclesReservedByClient(Client client) throws ServiceException {
+		// TODO: récupérer tous les clients
+
+		try {
+
+			return vehicleDao.findDistinctVehiclesReservedByClient(client);
+
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
 
 		}
 
@@ -102,7 +115,7 @@ public class VehicleService {
 			return vehicleDao.nbOfVehicle();
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
-			throw new ServiceException("Erreur");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
