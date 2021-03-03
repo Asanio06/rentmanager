@@ -33,29 +33,29 @@ public class ReservationDao {
 	
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = 
 			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
-			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
-			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
-			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id"
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
 			+ "WHERE Reservation.Client.id = ?;";
 	
 	private static final String FIND_RESERVATIONS_BY_VEHICLE_QUERY = 
 			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
-			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
-			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance,"
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
-			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id"
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
 			+ "WHERE Reservation.vehicle_id=?;";
 	
 	private static final String FIND_RESERVATIONS_QUERY = 
 			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
-			+ "Client.nom, Client.prenom,Client.email, Client.naissance"
-			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places"
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance,"
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
-			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id";
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id ";
 	
 	private static final String COUNT_RESERVATION_QUERY = "SELECT COUNT(id) AS count FROM Reservation;";
 	
@@ -126,6 +126,7 @@ public class ReservationDao {
 			
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
 				
 				Client client = new Client();
 				client.setId(resultSet.getInt("client_id"));
@@ -171,6 +172,8 @@ public class ReservationDao {
 			ResultSet resultSet = ps.executeQuery();
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
+				
 				Client client = new Client();
 				client.setId(resultSet.getInt("client_id"));
 				client.setNom(resultSet.getString("nom"));
@@ -215,6 +218,8 @@ public class ReservationDao {
 			ResultSet resultSet = ps.executeQuery();
 			while(resultSet.next()) {
 				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
+				
 				Client client = new Client();
 				client.setId(resultSet.getInt("client_id"));
 				client.setNom(resultSet.getString("nom"));

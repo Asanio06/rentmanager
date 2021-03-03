@@ -36,30 +36,11 @@
                                 </tr>
 
 
-                                <tr>
-                                    <td>1.</td>
-                                    <td>Renault Clio</td>
-                                    <td>John Doe</td>
-                                    <td>10/01/2019</td>
-                                    <td>13/01/2019</td>
-                                    <td>
-                                        <a class="btn btn-primary disabled" href="${pageContext.request.contextPath}/cars?id=1">
-                                            <i class="fa fa-play"></i>
-                                        </a>
-                                        <a class="btn btn-success disabled" href="#">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a class="btn btn-danger disabled" href="#">
-                                            <i class="fa fa-trash"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-
                                 <c:forEach items="${Reservations}" var="reservation">
                                 <tr>
                                     <td>${reservation.id}.</td>
-                                    <td>${reservation.vehicle.modele}</td>
-                                    <td>${reservation.client.nom}</td>
+                                    <td>${reservation.vehicle.constructeur} ${reservation.vehicle.modele} </td>
+                                    <td>${reservation.client.nom} ${reservation.client.prenom}</td>
                                     <td>${reservation.debut}</td>
                                     <td>${reservation.fin}</td>
                                     <!--<td>John Doe</td>-->

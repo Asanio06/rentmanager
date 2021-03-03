@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.ReservationService;
@@ -56,8 +57,14 @@ public class UiReservation {
 		try {
 
 			Reservation reservation = new Reservation();
-			reservation.setVehicle_id(vehicleId);
-			reservation.setClient_id(clientId);
+			Client client = new Client();
+			client.setId(clientId);
+			reservation.setClient(client);
+			
+			Vehicle vehicle = new Vehicle();
+			vehicle.setId(vehicleId);
+			reservation.setVehicle(vehicle);
+			
 			reservation.setDebut(dateDebut);
 			reservation.setFin(dateFin);
 
