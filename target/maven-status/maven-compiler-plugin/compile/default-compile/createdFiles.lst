@@ -24,4 +24,5 @@ com/epf/rentmanager/dao/ReservationDao.class
 com/epf/rentmanager/ui/UiReservation.class
 com/epf/rentmanager/ui/servlets/ReservationCreateServlet.class
 com/epf/rentmanager/persistence/FillDatabase.class
+com/epf/rentmanager/ui/servlets/ClientEditServlet.class
 com/epf/rentmanager/service/ReservationService.class
