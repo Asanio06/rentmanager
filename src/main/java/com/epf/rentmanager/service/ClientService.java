@@ -9,6 +9,7 @@ import org.h2.command.dml.Update;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 
 public class ClientService {
@@ -107,6 +108,20 @@ public class ClientService {
 			throw new ServiceException(e.getMessage());
 
 		}
+	}
+	
+	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws ServiceException {
+		// TODO: récupérer tous les clients
+
+		try {
+
+			return clientDao.findDistinctClientByVehicleUsed(vehicle);
+
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+
+		}
+
 	}
 	
 	public int nbOfClient() throws ServiceException {

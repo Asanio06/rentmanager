@@ -36,6 +36,13 @@ public class ClientDao {
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
 	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client Set nom=?,prenom=?,email=?,naissance=? WHERE id=?";
 	private static final String COUNT_CLIENT_QUERY = "SELECT COUNT(id) AS count FROM Client;";
+	private static final String FIND_DISTINCT_CLIENTS__BY_VEHICLE_USED_QUERY =
+			"SELECT  DISTINCT Client.id,Client.nom, Client.prenom, Client.email, Client.naissance "
+			+ "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
+			+ "WHERE Reservation.vehicle_id = ?";
+	
 	public long create(Client client) throws DaoException {
 		long id = 0;
 		try {
@@ -169,6 +176,34 @@ public class ClientDao {
 
 		return list_client;
 
+	}
+	
+	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws DaoException{
+		List<Client> list_client = new ArrayList<>();
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(FIND_DISTINCT_CLIENTS__BY_VEHICLE_USED_QUERY);
+			ps.setLong(1, vehicle.getId());
+			ResultSet resultSet = ps.executeQuery();
+			while (resultSet.next()) {
+				Client client = new Client();
+				client.setId(resultSet.getLong("id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+				list_client.add(client);
+
+			}
+			resultSet.close();
+			ps.close();
+			connection.close();
+			
+			return list_client;
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage());
+		}
 	}
 	
 	public int nbOfClient() throws DaoException {

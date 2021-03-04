@@ -96,6 +96,7 @@ public class VehicleService {
 		}
 
 	}
+	
 	public List<Vehicle> findDistinctVehiclesReservedByClient(Client client) throws ServiceException {
 		// TODO: récupérer tous les clients
 
