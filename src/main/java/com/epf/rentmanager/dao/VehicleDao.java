@@ -32,7 +32,7 @@ public class VehicleDao {
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLE_QUERY = "SELECT id, modele, constructeur, nb_places FROM Vehicle WHERE id=?;";
 	private static final String FIND_VEHICLES_QUERY = "SELECT id, constructeur, modele, nb_places FROM Vehicle;";
-	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicule SET constructeur = ?, modele = ?, nb_places = ? WHEREid = ?;";
+	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
 	private static final String COUNT_VEHICLE_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
 	private static final String FIND_DISTINCT_VEHICLES_RESA_BY_CLIENT_QUERY =
 			"SELECT  DISTINCT Vehicle.id,Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
@@ -52,6 +52,7 @@ public class VehicleDao {
 			ps.setString(1, vehicle.getConstructeur());
 			ps.setString(2, vehicle.getModele());
 			ps.setShort(3, vehicle.getNb_places());
+			
 
 			ps.executeUpdate();
 			ResultSet resultSet = ps.getGeneratedKeys();
@@ -79,6 +80,7 @@ public class VehicleDao {
 			ps.setString(1, vehicle.getConstructeur());
 			ps.setString(2, vehicle.getModele());
 			ps.setShort(3, vehicle.getNb_places());
+			ps.setLong(4, vehicle.getId());
 
 			int nb_ligne_update = ps.executeUpdate();
 			ps.close();

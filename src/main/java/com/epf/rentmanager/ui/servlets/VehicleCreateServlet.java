@@ -29,13 +29,14 @@ public class VehicleCreateServlet extends HttpServlet{
 		vehicle.setConstructeur(request.getParameter("manufacturer"));
 		vehicle.setModele(request.getParameter("modele"));
 		vehicle.setNb_places(Short.parseShort(request.getParameter("seats")));
+		response.sendRedirect("http://localhost:8080/rentmanager/cars");
 		try {
 			vehicleService.create(vehicle);
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
-		response.sendRedirect("http://localhost:8080/rentmanager/cars");
+		
 		
 	}
 }
