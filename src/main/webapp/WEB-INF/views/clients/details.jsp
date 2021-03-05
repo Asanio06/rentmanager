@@ -72,8 +72,8 @@
                                     <table class="table table-striped">
                                         <tr>
                                             <th style="width: 10px">#</th>
-                                            <th>Modele</th>
                                             <th>Constructeur</th>
+                                            <th>Modele</th>
                                             <th>Nombre de places</th>
                                         </tr>
                                         <c:forEach items="${Vehicles}" var="vehicle">

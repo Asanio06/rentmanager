@@ -31,3 +31,4 @@ com/epf/rentmanager/persistence/FillDatabase.class
 com/epf/rentmanager/ui/servlets/ClientEditServlet.class
 com/epf/rentmanager/ui/servlets/VehicleDeleteVehicle.class
 com/epf/rentmanager/service/ReservationService.class
+com/epf/rentmanager/ui/servlets/ReservationDetailsServlet.class
