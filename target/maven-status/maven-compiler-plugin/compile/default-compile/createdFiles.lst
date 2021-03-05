@@ -1,3 +1,4 @@
+com/epf/rentmanager/ui/servlets/ReservationEditServlet.class
 com/epf/rentmanager/ui/servlets/VehicleCreateServlet.class
 com/epf/rentmanager/ui/servlets/ClientListServlet.class
 com/epf/rentmanager/ui/servlets/ClientCreateServlet.class
