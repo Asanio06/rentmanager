@@ -7,6 +7,7 @@ import com.epf.rentmanager.dao.ReservationDao;
 import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
+import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 
@@ -42,6 +43,28 @@ public class ReservationService {
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			throw new ServiceException(e.getMessage());
+		}
+
+	}
+	
+	public Reservation findById(long id) throws ServiceException {
+		// TODO: récupérer un client par son id
+		Reservation reservation;
+		try {
+			Optional<Reservation> opt_reservation = reservationDao.findById(id);
+
+			if (opt_reservation.isPresent()) {
+				reservation = opt_reservation.get();
+			} else {
+				throw new ServiceException("La réservation n'existe pas");
+
+			}
+
+			return reservation;
+
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+
 		}
 
 	}
