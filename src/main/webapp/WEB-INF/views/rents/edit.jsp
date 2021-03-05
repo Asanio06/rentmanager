@@ -26,6 +26,7 @@
                     <div class="box">
                         <!-- form start -->
                         <form class="form-horizontal" method="post" >
+                            <input type="hidden" name="id" value="${reservation.id}">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="car" class="col-sm-2 control-label">Voiture</label>
@@ -38,7 +39,7 @@
                                     <label for="client" class="col-sm-2 control-label">Client</label>
 
                                     <div class="col-sm-10">
-                                        <input type="text" readonly class="form-control-plaintext" name="vehicle" value="${reservation.client.nom} ${reservation.client.prenom}">
+                                        <input type="text" readonly class="form-control-plaintext" name="client" value="${reservation.client.nom} ${reservation.client.prenom}">
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -31,6 +31,7 @@ public class ReservationDao {
 	
 	private static final String CREATE_RESERVATION_QUERY = "INSERT INTO Reservation(client_id, vehicle_id, debut, fin) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_RESERVATION_QUERY = "DELETE FROM Reservation WHERE id=?;";
+	private static final String UPDATE_RESERVATION_QUERY = "UPDATE Reservation SET debut=?, fin=? WHERE id=?;";
 	
 	private static final String FIND_RESERVATIONS_BY_CLIENT_QUERY = 
 			"SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
@@ -121,6 +122,30 @@ public class ReservationDao {
 		}
 		
 		
+	}
+	
+	public int update(Reservation reservation) throws DaoException {
+
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(UPDATE_RESERVATION_QUERY);
+			ps.setDate(1, reservation.getDebut());
+			ps.setDate(2, reservation.getFin());
+			ps.setLong(3, reservation.getId());
+			
+
+			int nb_ligne_update = ps.executeUpdate();
+			ps.close();
+			connection.close();
+
+			return nb_ligne_update;
+
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage());
+
+		}
+
 	}
 
 	

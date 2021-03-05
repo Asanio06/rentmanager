@@ -43,7 +43,7 @@ public class ReservationCreateServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		try {
-			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			
 			Reservation reservation = new Reservation();
 			
 			Client client = new Client();
@@ -56,7 +56,7 @@ public class ReservationCreateServlet extends HttpServlet {
 			reservation.setVehicle(vehicle);
 			
 			
-
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 			java.util.Date beginDate = format.parse(request.getParameter("begin"));
 			java.util.Date endDate = format.parse(request.getParameter("end"));
 

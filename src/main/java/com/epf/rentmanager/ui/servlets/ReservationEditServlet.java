@@ -1,6 +1,9 @@
 package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -36,7 +39,28 @@ public class ReservationEditServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		
+		try {
+			long reservationId = Long.parseLong(request.getParameter("id"));
+			Reservation reservation = reservationService.findById(reservationId);
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			java.util.Date beginDate = format.parse(request.getParameter("begin"));
+			java.util.Date endDate = format.parse(request.getParameter("end"));
+
+			reservation.setDebut(new java.sql.Date(beginDate.getTime())) ;
+			reservation.setFin(new java.sql.Date(endDate.getTime()));
+			reservationService.update(reservation);
+			response.sendRedirect("http://localhost:8080/rentmanager/rents");
+		}  catch (ServiceException e) {
+			// TODO Auto-generated catch block
+			System.out.print(e.getMessage());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			System.out.print(e.getMessage());
+		}
+		
+		
+		
 	}
 
 }

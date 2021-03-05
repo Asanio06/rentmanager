@@ -47,6 +47,14 @@ public class ReservationService {
 
 	}
 	
+	public int update(Reservation reservation) throws ServiceException{
+		try {
+			return reservationDao.update(reservation);
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+		}
+	}
+	
 	public Reservation findById(long id) throws ServiceException {
 		// TODO: récupérer un client par son id
 		Reservation reservation;
