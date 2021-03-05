@@ -9,6 +9,7 @@ import org.h2.command.dml.Update;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 
@@ -16,6 +17,7 @@ public class ClientService {
 
 	private ClientDao clientDao;
 	public static ClientService instance;
+	public static ReservationService reservationService = ReservationService.getInstance();
 
 	private ClientService() {
 		this.clientDao = ClientDao.getInstance();
@@ -54,6 +56,11 @@ public class ClientService {
 	public long deleteClient(Client client) throws ServiceException {
 		
 		try {
+			List<Reservation> list_reservation_of_client = reservationService.findResaByClientId(client.getId());
+			for (Reservation reservation : list_reservation_of_client) {
+				reservationService.delete(reservation);
+			}
+			
 			return clientDao.delete(client);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
