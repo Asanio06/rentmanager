@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
+import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
@@ -14,6 +15,7 @@ public class VehicleService {
 
 	private VehicleDao vehicleDao;
 	public static VehicleService instance;
+	private static ReservationService reservationService = ReservationService.getInstance();
 
 	private VehicleService() {
 		this.vehicleDao = VehicleDao.getInstance();
@@ -45,6 +47,10 @@ public class VehicleService {
 	public int delete(Vehicle vehicle) throws ServiceException {
 
 		try {
+			List<Reservation> list_reservation_of_vehicle = reservationService.findResaByVehicleId(vehicle.getId());
+			for (Reservation reservation : list_reservation_of_vehicle) {
+				reservationService.delete(reservation);
+			}
 			return vehicleDao.delete(vehicle);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
