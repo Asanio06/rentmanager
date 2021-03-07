@@ -2,6 +2,7 @@ package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -21,7 +22,6 @@ public class ClientEditServlet extends HttpServlet{
 	private static ClientService clientService = ClientService.getInstance();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/clients/edit.jsp");
@@ -30,7 +30,6 @@ public class ClientEditServlet extends HttpServlet{
 			request.setAttribute("client",client );
 			requestDispatcher.forward(request, response);
 		}catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
 		
@@ -38,7 +37,6 @@ public class ClientEditServlet extends HttpServlet{
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 			try {
 				Client client = new Client();
@@ -49,8 +47,8 @@ public class ClientEditServlet extends HttpServlet{
 				client.setNaissance(Date.valueOf(request.getParameter("naissance")));
 				clientService.updateClient(client);
 				response.sendRedirect("http://localhost:8080/rentmanager/clients");
+				
 			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
 				System.out.print(e.getMessage());
 			}
 		

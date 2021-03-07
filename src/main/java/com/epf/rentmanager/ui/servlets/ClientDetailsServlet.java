@@ -26,7 +26,6 @@ public class ClientDetailsServlet extends HttpServlet{
 	private static VehicleService vehicleService = VehicleService.getInstance();
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/clients/details.jsp");
 			long clientId = Long.parseLong(request.getParameter("id"));
@@ -43,7 +42,6 @@ public class ClientDetailsServlet extends HttpServlet{
 			requestDispatcher.forward(request, response);
 			
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
 		

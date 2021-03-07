@@ -1,6 +1,7 @@
 package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,6 +27,7 @@ public class ReservationDetailsServlet extends HttpServlet{
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
+		
 		
 		requestDispatcher.forward(request, response);
 	}

@@ -54,7 +54,7 @@ public class ClientDao {
 			ps.setString(3, client.getEmail());
 			ps.setDate(4, client.getNaissance());
 
-			ps.executeUpdate();
+			id = ps.executeUpdate();
 			ResultSet resultSet = ps.getGeneratedKeys();
 			if (resultSet.next()) {
 				id = resultSet.getLong(1);
@@ -138,10 +138,15 @@ public class ClientDao {
 			ps.setDate(4, client.getNaissance());
 			ps.setLong(5, client.getId());
 
-			ps.executeUpdate();
+			int nb_ligne_update = ps.executeUpdate();
 			ps.close();
 			connection.close();
-			return true;
+			if(nb_ligne_update >= 1) {
+				return true;
+			}else {
+				return false;
+			}
+			
 
 		} catch (SQLException e) {
 			throw new DaoException(e.getMessage());
