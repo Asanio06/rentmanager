@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.VehicleService;
@@ -16,7 +19,15 @@ import com.epf.rentmanager.service.VehicleService;
 @WebServlet("/cars/edit")
 public class VehicleEditServlet extends HttpServlet{
 	
-	private static VehicleService vehicleService = VehicleService.getInstance();
+	@Autowired
+	private VehicleService vehicleService;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +46,8 @@ public class VehicleEditServlet extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		boolean success = false;
+		String errorMessage = "";
 		try {
 			Vehicle vehicle = new Vehicle();
 			vehicle.setId(Long.parseLong(request.getParameter("id")));
@@ -43,10 +55,16 @@ public class VehicleEditServlet extends HttpServlet{
 			vehicle.setModele(request.getParameter("modele"));
 			vehicle.setNb_places(Short.parseShort(request.getParameter("seats")));
 			vehicleService.update(vehicle);
-			response.sendRedirect("http://localhost:8080/rentmanager/cars");
+			success = true;
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			errorMessage =  e.getMessage();
+		}finally {
+			if(success) {
+				response.sendRedirect("http://localhost:8080/rentmanager/cars");
+			}else {
+				request.setAttribute("error_message", errorMessage);
+				doGet(request, response);
+			}
 		}
 		
 	}

@@ -3,6 +3,9 @@ package com.epf.rentmanager.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
@@ -11,23 +14,19 @@ import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 import com.epf.rentmanager.dao.VehicleDao;
 
+@Service
 public class VehicleService {
 
 	private VehicleDao vehicleDao;
-	public static VehicleService instance;
-	private static ReservationService reservationService = ReservationService.getInstance();
-
-	private VehicleService() {
-		this.vehicleDao = VehicleDao.getInstance();
+	private static ReservationService reservationService ;
+	
+	@Autowired
+	private VehicleService(VehicleDao vehicleDao , ReservationService reservationService) {
+		this.vehicleDao = vehicleDao;
+		this.reservationService = reservationService;
 	}
 
-	public static VehicleService getInstance() {
-		if (instance == null) {
-			instance = new VehicleService();
-		}
 
-		return instance;
-	}
 
 	public long create(Vehicle vehicle) throws ServiceException {
 		// TODO: créer un véhicule; Verification du constructeur; Verification que

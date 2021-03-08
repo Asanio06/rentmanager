@@ -4,6 +4,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
@@ -11,7 +15,9 @@ import com.epf.rentmanager.utils.IOUtils;
 
 public class UiClient {
 	
-	private static ClientService client_service = ClientService.getInstance();
+	static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+	
+	static ClientService client_service = context.getBean(ClientService.class);
 
 	public static void action_client() {
 		int choix;

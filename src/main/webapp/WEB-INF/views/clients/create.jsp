@@ -26,6 +26,7 @@
                     <div class="box">
                         <!-- form start -->
                         <form class="form-horizontal" method="post">
+                            
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="last_name" class="col-sm-2 control-label">Nom</label>
@@ -56,6 +57,8 @@
                                         <input class="form-control" type="date" name="naissance">                                    
                                     </div>
                                 </div>
+                                <span class="error text-danger ">${error_message}</span>
+
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">

@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
@@ -19,7 +22,15 @@ import com.epf.rentmanager.service.ClientService;
 @WebServlet("/clients/edit")
 public class ClientEditServlet extends HttpServlet{
 	
-	private static ClientService clientService = ClientService.getInstance();
+	@Autowired
+	private ClientService clientService ;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -37,7 +48,8 @@ public class ClientEditServlet extends HttpServlet{
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+			boolean success = false;
+			String errorMessage = "";
 			try {
 				Client client = new Client();
 				client.setId(Long.parseLong(request.getParameter("id")));
@@ -46,10 +58,16 @@ public class ClientEditServlet extends HttpServlet{
 				client.setEmail(request.getParameter("email"));
 				client.setNaissance(Date.valueOf(request.getParameter("naissance")));
 				clientService.updateClient(client);
-				response.sendRedirect("http://localhost:8080/rentmanager/clients");
-				
+				success = true;
 			} catch (ServiceException e) {
 				System.out.print(e.getMessage());
+			}finally {
+				if(success) {
+					response.sendRedirect("http://localhost:8080/rentmanager/clients");
+				}else {
+					request.setAttribute("error_message", errorMessage);
+					doGet(request, response);
+				}
 			}
 		
 	}

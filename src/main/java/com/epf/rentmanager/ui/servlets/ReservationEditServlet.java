@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.service.ReservationService;
@@ -19,7 +22,15 @@ import com.epf.rentmanager.service.ReservationService;
 @WebServlet("/rents/edit")
 public class ReservationEditServlet extends HttpServlet {
 	
-	private static ReservationService reservationService = ReservationService.getInstance();
+	@Autowired
+	private  ReservationService reservationService;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,7 +50,8 @@ public class ReservationEditServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		
+		boolean success = false;
+		String errorMessage = "";
 		try {
 			long reservationId = Long.parseLong(request.getParameter("id"));
 			Reservation reservation = reservationService.findById(reservationId);
@@ -50,13 +62,20 @@ public class ReservationEditServlet extends HttpServlet {
 			reservation.setDebut(new java.sql.Date(beginDate.getTime())) ;
 			reservation.setFin(new java.sql.Date(endDate.getTime()));
 			reservationService.update(reservation);
-			response.sendRedirect("http://localhost:8080/rentmanager/rents");
+			success = true;
 		}  catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			errorMessage = e.getMessage();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			errorMessage = e.getMessage();
+		}finally {
+			if(success) {
+				response.sendRedirect("http://localhost:8080/rentmanager/rents");
+			}else {
+				request.setAttribute("error_message", errorMessage);
+				doGet(request, response);
+			}
 		}
 		
 		

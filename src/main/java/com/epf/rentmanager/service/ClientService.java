@@ -1,10 +1,14 @@
 package com.epf.rentmanager.service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.h2.command.dml.Update;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
@@ -13,22 +17,16 @@ import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.dao.ClientDao;
 
+@Service
 public class ClientService {
 
 	private ClientDao clientDao;
-	public static ClientService instance;
-	public static ReservationService reservationService = ReservationService.getInstance();
+	private ReservationService reservationService;
 
-	private ClientService() {
-		this.clientDao = ClientDao.getInstance();
-	}
-
-	public static ClientService getInstance() {
-		if (instance == null) {
-			instance = new ClientService();
-		}
-
-		return instance;
+	@Autowired
+	public ClientService(ClientDao clientDao , ReservationService reservationService) {
+		this.clientDao = clientDao;
+		this.reservationService = reservationService;
 	}
 
 	public long create(Client client) throws ServiceException {
@@ -41,6 +39,14 @@ public class ClientService {
 
 		if (client.getPrenom().isEmpty()) {
 			throw new ServiceException("Veuillez Saisir un prenom");
+		}
+		
+		LocalDate birthday = client.getNaissance().toLocalDate();
+		LocalDate today = LocalDate.now();
+		Period p = Period.between(birthday, today);
+		int age = p.getYears();
+		if(age<=18) {
+			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
 
 		client.setNom(client.getNom().toUpperCase());

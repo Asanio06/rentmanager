@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
@@ -22,12 +25,24 @@ import com.epf.rentmanager.service.VehicleService;
 
 @WebServlet("/rents/create")
 public class ReservationCreateServlet extends HttpServlet {
-	private static ClientService clientService = ClientService.getInstance();
-	private static VehicleService vehicleService = VehicleService.getInstance();
-	private static ReservationService reservationService = ReservationService.getInstance();
+	
+	@Autowired
+	private ClientService clientService;
+	
+	@Autowired
+	private VehicleService vehicleService ;
+	
+	@Autowired
+	private ReservationService reservationService;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/rents/create.jsp");
 			request.setAttribute("Vehicles", vehicleService.findAll());
@@ -41,7 +56,9 @@ public class ReservationCreateServlet extends HttpServlet {
 	
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
+		boolean success = false;
+		String errorMessage = "";
 		try {
 			
 			Reservation reservation = new Reservation();
@@ -63,14 +80,20 @@ public class ReservationCreateServlet extends HttpServlet {
 			reservation.setDebut(new java.sql.Date(beginDate.getTime())) ;
 			reservation.setFin(new java.sql.Date(endDate.getTime()));
 			reservationService.create(reservation);
-			response.sendRedirect("http://localhost:8080/rentmanager/rents");
-			
+			success = true;
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			errorMessage = e.getMessage();
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			errorMessage = e.getMessage();
+		}finally {
+			if(success) {
+				response.sendRedirect("http://localhost:8080/rentmanager/rents");
+			}else {
+				request.setAttribute("error_message", errorMessage);
+				doGet(request, response);
+			}
 		}
 		
 	

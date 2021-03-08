@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
@@ -20,9 +23,20 @@ import com.epf.rentmanager.service.VehicleService;
 
 @WebServlet("/cars/details")
 public class VehicleDetailsServlet extends HttpServlet {
-	private static VehicleService vehicleService = VehicleService.getInstance();
-	private static ReservationService reservationService = ReservationService.getInstance();
-	private static ClientService clientService = ClientService.getInstance();
+	
+	@Autowired
+	private VehicleService vehicleService ;
+	@Autowired
+	private ReservationService reservationService ;
+	@Autowired
+	private ClientService clientService ;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub

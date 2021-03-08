@@ -66,6 +66,7 @@
                                                data-inputmask="'alias': 'dd/mm/yyyy'" data-mask>
                                     </div>
                                 </div>
+                                <span class="error text-danger ">${error_message}</span>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">

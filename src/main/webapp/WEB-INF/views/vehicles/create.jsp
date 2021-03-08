@@ -55,18 +55,7 @@
                                         <input type="text" class="form-control" id="seats" name="seats" placeholder="Nombre de places" required>
                                     </div>
                                 </div>
-                                <!--
-                                <div class="form-group">
-                                    <label for="owner" class="col-sm-2 control-label">Propriétaire</label>
-
-                                    <div class="col-sm-10">
-                                        <select class="form-control" id="owner" name="owner">
-                                            <option value="1">John Doe</option>
-                                            <option value="2">Jane Doe</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                -->
+                                <span class="error text-danger ">${error_message}</span>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">

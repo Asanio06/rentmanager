@@ -3,6 +3,10 @@ package com.epf.rentmanager.ui;
 import java.sql.Date;
 import java.util.List;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.epf.rentmanager.configuration.AppConfiguration;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
@@ -13,7 +17,9 @@ import com.epf.rentmanager.utils.IOUtils;
 
 public class UiVehicle {
 
-	private static VehicleService vehicle_service = VehicleService.getInstance();
+	static ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+
+	private static VehicleService vehicle_service = context.getBean(VehicleService.class);
 
 	public static void action_vehicle() {
 		int choix;

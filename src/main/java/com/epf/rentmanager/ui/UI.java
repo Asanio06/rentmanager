@@ -15,7 +15,7 @@ import com.epf.rentmanager.service.ClientService;
 
 public class UI {
 	
-
+	
 	public static void main(String[] args) throws DaoException {
 		// TODO Auto-generated method stub
 		int choix; 

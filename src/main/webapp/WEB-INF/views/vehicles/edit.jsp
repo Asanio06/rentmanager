@@ -68,6 +68,7 @@
                                     </div>
                                 </div>
                                 -->
+                                <span class="error text-danger ">${error_message}</span>
                             </div>
                             <!-- /.box-body -->
                             <div class="box-footer">

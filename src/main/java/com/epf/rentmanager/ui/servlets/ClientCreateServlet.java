@@ -2,6 +2,9 @@ package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,13 +13,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
 
 @WebServlet("/clients/create")
 public class ClientCreateServlet extends HttpServlet{
-	private static ClientService clientService = ClientService.getInstance();
+	@Autowired
+	private ClientService clientService;
+	
+	@Override
+	public void init() throws ServletException {
+		// TODO Auto-generated method stub
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		RequestDispatcher requestDispacher = request.getRequestDispatcher("/WEB-INF/views/clients/create.jsp");
@@ -27,18 +41,30 @@ public class ClientCreateServlet extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		boolean success = false;
+		String errorMessage = "";
 		try {
 			Client client = new Client();
 			client.setNom(request.getParameter("last_name"));
 			client.setPrenom(request.getParameter("first_name"));
 			client.setEmail(request.getParameter("email"));
 			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
+			
 			clientService.create(client);
-			response.sendRedirect("http://localhost:8080/rentmanager/clients");
+			success = true;
+			
 			
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			 errorMessage = e.getMessage();
+			
+		}finally {
+			if(success) {
+				response.sendRedirect("http://localhost:8080/rentmanager/clients");
+			}else {
+				request.setAttribute("error_message", errorMessage);
+				doGet(request, response);
+			}
 		}
 		
 		

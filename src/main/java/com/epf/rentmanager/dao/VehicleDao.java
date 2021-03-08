@@ -9,24 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.persistence.ConnectionManager;
 
+@Repository
 public class VehicleDao {
-
-	private static VehicleDao instance = null;
-
-	private VehicleDao() {
-	}
-
-	public static VehicleDao getInstance() {
-		if (instance == null) {
-			instance = new VehicleDao();
-		}
-		return instance;
-	}
 
 	private static final String CREATE_VEHICLE_QUERY = "INSERT INTO Vehicle(constructeur,modele, nb_places) VALUES(?, ?,?);";
 	private static final String DELETE_VEHICLE_QUERY = "DELETE FROM Vehicle WHERE id=?;";
