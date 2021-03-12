@@ -7,6 +7,7 @@ import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class IOUtils {
 	
@@ -153,5 +154,15 @@ public class IOUtils {
 		
 		return ChronoUnit.DAYS.between(LocalDate.parse(date1.toString()),LocalDate.parse(date2.toString()));
 
+	}
+	
+	public static boolean isValidMail(String email) {
+		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
+				+ "A-Z]{2,7}$";
+
+		Pattern pat = Pattern.compile(emailRegex);
+		if (email == null)
+			return false;
+		return pat.matcher(email).matches();
 	}
 }

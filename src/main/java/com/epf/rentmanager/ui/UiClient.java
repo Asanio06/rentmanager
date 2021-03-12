@@ -59,7 +59,7 @@ public class UiClient {
 
 		String email_client = "";
 
-		while (!isValidMail(email_client)) {
+		while (!IOUtils.isValidMail(email_client)) {
 
 			email_client = IOUtils.readString("Email: ", true);
 		}
@@ -107,7 +107,7 @@ public class UiClient {
 			}
 
 			String email = "NaN";
-			while (!isValidMail(email) && !email.isEmpty()) {
+			while (!IOUtils.isValidMail(email) && !email.isEmpty()) {
 				email = IOUtils.readString("Nouveau email:", false);
 			}
 
@@ -183,14 +183,6 @@ public class UiClient {
 
 	}
 
-	public static boolean isValidMail(String email) {
-		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
-				+ "A-Z]{2,7}$";
-
-		Pattern pat = Pattern.compile(emailRegex);
-		if (email == null)
-			return false;
-		return pat.matcher(email).matches();
-	}
+	
 
 }

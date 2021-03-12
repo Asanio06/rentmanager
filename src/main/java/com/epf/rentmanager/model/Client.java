@@ -1,6 +1,8 @@
 package com.epf.rentmanager.model;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.Period;
 
 public class Client {
 	private long id;
@@ -57,5 +59,13 @@ public class Client {
 	}
 	public void setNaissance(Date naissance) {
 		this.naissance = naissance;
+	}
+	
+	public int getAge() {
+		LocalDate birthday = this.naissance.toLocalDate();
+		LocalDate today = LocalDate.now();
+		Period p = Period.between(birthday, today);
+		int age = p.getYears();
+		return age;
 	}
 }

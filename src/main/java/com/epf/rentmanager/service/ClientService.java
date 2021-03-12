@@ -41,11 +41,7 @@ public class ClientService {
 			throw new ServiceException("Veuillez Saisir un prenom");
 		}
 		
-		LocalDate birthday = client.getNaissance().toLocalDate();
-		LocalDate today = LocalDate.now();
-		Period p = Period.between(birthday, today);
-		int age = p.getYears();
-		if(age<=18) {
+		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
 
@@ -76,8 +72,21 @@ public class ClientService {
 
 	public boolean updateClient(Client client) throws ServiceException {
 
-		try {
+		if (client.getNom().isEmpty()) {
+			throw new ServiceException("Veuillez Saisir un nom");
+		}
 
+		if (client.getPrenom().isEmpty()) {
+			throw new ServiceException("Veuillez Saisir un prenom");
+		}
+		
+		if(client.getAge()<=18) {
+			throw new ServiceException("Vous devez avoir 18 ans ou plus");
+		}
+
+		client.setNom(client.getNom().toUpperCase());
+		
+		try {
 			clientDao.update(client);
 			return true;
 
