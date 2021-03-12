@@ -1,8 +1,11 @@
 package com.epf.rentmanager.utils;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Scanner;
 
 public class IOUtils {
@@ -130,5 +133,25 @@ public class IOUtils {
 		} while (error && mandatory);
         
 		return output;
+	}
+	
+	public static Date subtractDays(Date date, int days) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, -days);
+        return new Date(c.getTimeInMillis());
+    }
+	
+	public static Date addDays(Date date, int days) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE, days);
+        return new Date(c.getTimeInMillis());
+    }
+	
+	public static long dateDiff(Date date1, Date date2) {
+		
+		return ChronoUnit.DAYS.between(LocalDate.parse(date1.toString()),LocalDate.parse(date2.toString()));
+
 	}
 }

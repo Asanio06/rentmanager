@@ -24,7 +24,8 @@ public class UiReservation {
 		int choix;
 		choix = IOUtils.readInt("Veuillez saisir le chiffre correspondant à votre action:\n"
 				+ "1. Créer une réservation\n" + "2. Supprimer une réservation\n" + "3. Lister les réservations d'un client\n"
-				+ "4. Lister les réservations d'un véhicule\n" + "5. Afficher toutes les réservations\n");
+				+ "4. Lister les réservations d'un véhicule\n" + "5. Afficher toutes les réservations\n"
+						+ "6.Lister les réservations des 30 derniers jours pour un vehicule\n");
 		switch (choix) {
 		case 1:
 			ui_createReservation();
@@ -44,6 +45,10 @@ public class UiReservation {
 
 		case 5:
 			ui_findAllReservation();
+			break;
+			
+		case 6:
+			ui_find30LastResaByVehicleId();
 			break;
 
 		default:
@@ -130,6 +135,29 @@ public class UiReservation {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
+		
+	}
+	
+	public static void ui_find30LastResaByVehicleId() {
+		//try {
+
+			long vehicleId = IOUtils.readInt("Saississez l'identifiant du véhicules dont vous souhaitez lister les réservations: ");
+			Reservation reservationATester = new Reservation();
+			reservationATester.setDebut(Date.valueOf("2021-03-08"));
+			reservationATester.setFin(Date.valueOf("2021-03-09"));
+			Vehicle vehicle = new Vehicle();
+			vehicle.setId(vehicleId);
+			reservationATester.setVehicle(vehicle);
+			reservationATester.setClient(new Client());
+			reservation_service.nbOfDaysInARowTheVehicleIsReserved(reservationATester);
+			
+			/*for(Reservation reservation : listResaOfVehicle) {
+				IOUtils.print(reservation.toString());
+			}*
+
+		} catch (ServiceException e) {
+			System.out.print(e.getMessage());
+		}*/
 		
 	}
 

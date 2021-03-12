@@ -23,6 +23,7 @@ public class UiVehicle {
 
 	public static void action_vehicle() {
 		int choix;
+		
 		choix = IOUtils.readInt("Veuillez saisir le chiffre correspondant à votre action:\n" + "1. Créer un vehicule\n"
 				+ "2. Modifier un vehicule\n" + "3. Supprimer un vehicule\n"
 				+ "4. Trouver un vehicule à partir de son id\n" + "5. Afficher tout les vehicules\n"

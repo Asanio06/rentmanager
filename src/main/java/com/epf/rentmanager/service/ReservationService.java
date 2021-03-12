@@ -1,5 +1,6 @@
 package com.epf.rentmanager.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
+import com.epf.rentmanager.utils.IOUtils;
 
 @Service
 public class ReservationService {
@@ -23,8 +25,11 @@ public class ReservationService {
 		this.reservationDao = reservationDao;
 	}
 
-
 	public long create(Reservation reservation) throws ServiceException {
+
+		if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
+			throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+		}
 
 		try {
 			return reservationDao.create(reservation);
@@ -43,15 +48,18 @@ public class ReservationService {
 		}
 
 	}
-	
-	public int update(Reservation reservation) throws ServiceException{
+
+	public int update(Reservation reservation) throws ServiceException {
+		if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
+			throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+		}
 		try {
 			return reservationDao.update(reservation);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
 		}
 	}
-	
+
 	public Reservation findById(long id) throws ServiceException {
 		// TODO: récupérer un client par son id
 		Reservation reservation;
@@ -96,6 +104,28 @@ public class ReservationService {
 
 	}
 
+	public List<Reservation> findResaOf30LastDayByVehicle(Reservation reservation) throws ServiceException {
+
+		try {
+			return reservationDao.findResaOf30LastDayByVehicle(reservation);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e.getMessage());
+		}
+
+	}
+
+	public List<Reservation> findResaOf30DayAfterByVehicle(Reservation reservation) throws ServiceException {
+
+		try {
+			return reservationDao.findResaOf30DayAfterByVehicle(reservation);
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			throw new ServiceException(e.getMessage());
+		}
+
+	}
+
 	public List<Reservation> findAll() throws ServiceException {
 		// TODO: récupérer tous les clients
 
@@ -107,7 +137,7 @@ public class ReservationService {
 		}
 
 	}
-	
+
 	public int nbOfResa() throws ServiceException {
 		try {
 			return reservationDao.nbOfResa();
@@ -115,6 +145,61 @@ public class ReservationService {
 			// TODO Auto-generated catch block
 			throw new ServiceException("Erreur");
 		}
+	}
+
+	public long nbOfDaysInARowTheVehicleIsReserved(Reservation reservationATester) {
+		long nb_afile_30daysBefore = 0;
+		long nb_afile_30daysAfter = 0;
+		long nb_jour_resa_consecutive = 0;
+		try {
+
+			List<Reservation> list_resa_qui_se_suive_30_daysBefore = new ArrayList<Reservation>();
+			List<Reservation> list_resa_qui_se_suive_30_daysAfter = new ArrayList<Reservation>();
+			List<Reservation> list_resa_30daysBefore = reservationDao.findResaOf30LastDayByVehicle(reservationATester);
+			List<Reservation> list_resa_30daysAfter = reservationDao.findResaOf30DayAfterByVehicle(reservationATester);
+			list_resa_30daysBefore.add(0, reservationATester);
+			list_resa_30daysAfter.add(0, reservationATester);
+			long nb_jour_reservation = IOUtils.dateDiff(reservationATester.getDebut(), reservationATester.getFin()) + 1;
+
+			for (int i = 0; i < list_resa_30daysBefore.size() - 1; i++) {
+
+				if (list_resa_30daysBefore.get(i).getDebut()
+						.equals(IOUtils.addDays(list_resa_30daysBefore.get(i + 1).getFin(), 1))) {
+					list_resa_qui_se_suive_30_daysBefore.add(list_resa_30daysBefore.get(i + 1));
+				} else {
+					break;
+				}
+			}
+
+			for (int i = 0; i < list_resa_30daysAfter.size() - 1; i++) {
+				if (list_resa_30daysAfter.get(i).getFin()
+						.equals(IOUtils.subtractDays(list_resa_30daysAfter.get(i + 1).getDebut(), 1))) {
+
+					list_resa_qui_se_suive_30_daysAfter.add(list_resa_30daysAfter.get(i + 1));
+				} else {
+					break;
+				}
+
+			}
+
+			for (Reservation reservation : list_resa_qui_se_suive_30_daysAfter) {
+				nb_afile_30daysAfter += IOUtils.dateDiff(reservation.getDebut(), reservation.getFin()) + 1;
+
+			}
+
+			for (Reservation reservation : list_resa_qui_se_suive_30_daysBefore) {
+				nb_afile_30daysBefore += IOUtils.dateDiff(reservation.getDebut(), reservation.getFin()) + 1;
+
+			}
+
+			nb_jour_resa_consecutive = nb_afile_30daysBefore + nb_afile_30daysAfter + nb_jour_reservation;
+
+		} catch (DaoException e) {
+			// TODO Auto-generated catch block
+			System.out.print(e.getMessage());
+		}
+		return nb_jour_resa_consecutive;
+
 	}
 
 }

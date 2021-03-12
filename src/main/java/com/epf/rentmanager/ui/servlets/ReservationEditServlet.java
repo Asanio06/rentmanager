@@ -1,6 +1,7 @@
 package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -55,21 +56,16 @@ public class ReservationEditServlet extends HttpServlet {
 		try {
 			long reservationId = Long.parseLong(request.getParameter("id"));
 			Reservation reservation = reservationService.findById(reservationId);
-			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-			java.util.Date beginDate = format.parse(request.getParameter("begin"));
-			java.util.Date endDate = format.parse(request.getParameter("end"));
 
-			reservation.setDebut(new java.sql.Date(beginDate.getTime())) ;
-			reservation.setFin(new java.sql.Date(endDate.getTime()));
+
+			reservation.setDebut(Date.valueOf(request.getParameter("begin"))) ;
+			reservation.setFin(Date.valueOf(request.getParameter("end")));
 			reservationService.update(reservation);
 			success = true;
 		}  catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			errorMessage = e.getMessage();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			errorMessage = e.getMessage();
-		}finally {
+		} finally {
 			if(success) {
 				response.sendRedirect("http://localhost:8080/rentmanager/rents");
 			}else {

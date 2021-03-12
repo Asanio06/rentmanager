@@ -21,6 +21,8 @@ public class UI {
 		int choix; 
 		choix = IOUtils.readInt("Veuillez saisir le chiffre correspondant à votre action:\n"
 				+ "1. Agir sur les clients\n" + "2. Agir sur les véhicules\n" + "3. Agir sur les réservations\n");
+		
+		
 		switch (choix) {
 
 		case 1:

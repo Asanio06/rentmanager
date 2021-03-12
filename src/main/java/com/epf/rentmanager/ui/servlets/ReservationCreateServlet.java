@@ -1,6 +1,7 @@
 package com.epf.rentmanager.ui.servlets;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,6 +48,7 @@ public class ReservationCreateServlet extends HttpServlet {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/rents/create.jsp");
 			request.setAttribute("Vehicles", vehicleService.findAll());
 			request.setAttribute("Clients", clientService.findAll());
+			
 			requestDispatcher.forward(request, response);
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
@@ -72,18 +74,12 @@ public class ReservationCreateServlet extends HttpServlet {
 			vehicle.setId(Long.parseLong(request.getParameter("car")));
 			reservation.setVehicle(vehicle);
 			
-			
-			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-			java.util.Date beginDate = format.parse(request.getParameter("begin"));
-			java.util.Date endDate = format.parse(request.getParameter("end"));
+	
 
-			reservation.setDebut(new java.sql.Date(beginDate.getTime())) ;
-			reservation.setFin(new java.sql.Date(endDate.getTime()));
+			reservation.setDebut(Date.valueOf(request.getParameter("begin"))) ;
+			reservation.setFin(Date.valueOf(request.getParameter("end")));
 			reservationService.create(reservation);
 			success = true;
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			errorMessage = e.getMessage();
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			errorMessage = e.getMessage();
