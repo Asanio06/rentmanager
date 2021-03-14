@@ -30,6 +30,14 @@ public class ClientService {
 	}
 
 	public long create(Client client) throws ServiceException {
+		
+		if (client.getNom().length() < 3) {
+			throw new ServiceException("Le nom doit contenir au moins 3 caractères");
+		}
+
+		if (client.getPrenom().length() < 3) {
+			throw new ServiceException("Le prénom doit contenir au moins 3 caractères");
+		}
 
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
@@ -66,7 +74,14 @@ public class ClientService {
 
 	public boolean updateClient(Client client) throws ServiceException {
 
+		if (client.getNom().length() < 3) {
+			throw new ServiceException("Le nom doit contenir au moins 3 caractères");
+		}
 
+		if (client.getPrenom().length() < 3) {
+			throw new ServiceException("Le prénom doit contenir au moins 3 caractères");
+		}
+		
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
