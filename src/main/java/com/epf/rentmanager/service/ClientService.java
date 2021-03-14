@@ -30,8 +30,6 @@ public class ClientService {
 	}
 
 	public long create(Client client) throws ServiceException {
-		// TODO: créer un client ; Verification du nom et du prenom ; Le nom doit être
-		// en majuscule
 
 		if (client.getNom().isEmpty()) {
 			throw new ServiceException("Veuillez Saisir un nom");
@@ -43,6 +41,10 @@ public class ClientService {
 		
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
+		}
+		
+		if (verifyIfEmailIsUse(client)) {
+			throw new ServiceException("L'adresse mail est déjà utilisé");
 		}
 
 		client.setNom(client.getNom().toUpperCase());
@@ -83,6 +85,10 @@ public class ClientService {
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
+		
+		if (verifyIfEmailIsUse(client)) {
+			throw new ServiceException("L'adresse mail est déjà utilisé");
+		}
 
 		client.setNom(client.getNom().toUpperCase());
 		
@@ -112,6 +118,30 @@ public class ClientService {
 
 			return client;
 
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+
+		}
+
+	}
+	
+	public boolean verifyIfEmailIsUse(Client clientATester) throws ServiceException {
+		// TODO: récupérer un client par son id
+		Client client;
+		try {
+			Optional<Client> opt_client = clientDao.findByEmail(clientATester.getEmail());
+
+			if (opt_client.isPresent()) {
+				client = opt_client.get();
+				if (clientATester.getId() == client.getId()) {
+					return false;
+				}else {
+					return true;
+				}
+			} else {
+				return false;
+			}
+			
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
 

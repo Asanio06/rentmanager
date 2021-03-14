@@ -21,17 +21,9 @@ import com.epf.rentmanager.persistence.ConnectionManager;
 @Repository
 public class ClientDao {
 
-	private static ClientDao instance = null;
 
-	private ClientDao() {
-	}
 
-	public static ClientDao getInstance() {
-		if (instance == null) {
-			instance = new ClientDao();
-		}
-		return instance;
-	}
+
 
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
@@ -45,6 +37,7 @@ public class ClientDao {
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
 			+ "WHERE Reservation.vehicle_id = ?";
+	private static final String FIND_CLIENT_BY_EMAIL_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE Client.email = ?";
 	
 	public long create(Client client) throws DaoException {
 		long id = 0;
@@ -237,5 +230,43 @@ public class ClientDao {
 			throw new DaoException(e.getMessage());
 		}
 	}
+	
+	public Optional<Client> findByEmail(String email) throws DaoException {
+		Optional<Client> opt_client;
+
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(FIND_CLIENT_BY_EMAIL_QUERY);
+			ps.setString(1, email);
+
+			ResultSet resultSet = ps.executeQuery();
+			if (resultSet.next()) {
+				Client client = new Client();
+				client.setId(resultSet.getInt("id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+
+				opt_client = Optional.of(client);
+
+			} else {
+				opt_client = Optional.empty();
+			}
+			resultSet.close();
+			ps.close();
+			connection.close();
+
+			return opt_client;
+		} catch (SQLException e) {
+			// System.out.print(e.getMessage());
+			throw new DaoException(e.getMessage());
+
+		}
+
+	}
+	
+	
 
 }

@@ -60,7 +60,7 @@ public class ClientEditServlet extends HttpServlet{
 				clientService.updateClient(client);
 				success = true;
 			} catch (ServiceException e) {
-				System.out.print(e.getMessage());
+				errorMessage = e.getMessage();
 			}finally {
 				if(success) {
 					response.sendRedirect("http://localhost:8080/rentmanager/clients");
