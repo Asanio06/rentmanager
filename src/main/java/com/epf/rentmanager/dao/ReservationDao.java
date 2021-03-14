@@ -73,6 +73,17 @@ public class ReservationDao {
 			+ "WHERE Reservation.vehicle_id = ? AND Reservation.debut BETWEEN ? AND ? "
 			+ "AND Reservation.debut != ? "
 			+ "ORDER BY Reservation.debut ASC;";
+	
+	private static final String FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION= "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " 
+			+ "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
+			+ "WHERE Reservation.vehicle_id = ? "
+			+ "AND ( ? BETWEEN Reservation.debut AND Reservation.fin OR ? BETWEEN Reservation.debut AND Reservation.fin ) "
+			+ "AND Reservation.id != ? "
+			+ "ORDER BY Reservation.debut ASC;";
 
 	public long create(Reservation reservation) throws DaoException {
 
@@ -298,6 +309,56 @@ public class ReservationDao {
 			ps.setDate(2, reservationATester.getDebut());
 			ps.setDate(3, IOUtils.addDays(reservationATester.getDebut(), 30));
 			ps.setDate(4, reservationATester.getDebut());
+			ResultSet resultSet = ps.executeQuery();
+
+			while (resultSet.next()) {
+				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
+
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+
+				reservation.setClient(client);
+
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+
+				reservation.setDebut(resultSet.getDate("debut"));
+				reservation.setFin(resultSet.getDate("fin"));
+
+				list_reservation.add(reservation);
+
+			}
+			
+			resultSet.close();
+			ps.close();
+			connection.close();
+			return list_reservation;
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage());
+		}
+
+	}
+	
+	public List<Reservation> findResaOfVehicleInPeriodOfOtherReservation(Reservation reservationATester) throws DaoException {
+
+		List<Reservation> list_reservation = new ArrayList<>();
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION);
+			ps.setLong(1, reservationATester.getVehicle().getId());
+			ps.setDate(2, reservationATester.getDebut());
+			ps.setDate(3, reservationATester.getFin());
+			ps.setLong(4, reservationATester.getId());
 			ResultSet resultSet = ps.executeQuery();
 
 			while (resultSet.next()) {

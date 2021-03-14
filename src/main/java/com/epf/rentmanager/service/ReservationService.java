@@ -27,11 +27,15 @@ public class ReservationService {
 
 	public long create(Reservation reservation) throws ServiceException {
 
-		if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
-			throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
-		}
-
 		try {
+			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
+				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
+			}
+
+			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
+				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+			}
+
 			return reservationDao.create(reservation);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
@@ -50,14 +54,19 @@ public class ReservationService {
 	}
 
 	public int update(Reservation reservation) throws ServiceException {
-		if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
-			throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
-		}
+
 		try {
+			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
+				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
+			}
+
+			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
+				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+			}
 			return reservationDao.update(reservation);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
-		}
+		} 
 	}
 
 	public Reservation findById(long id) throws ServiceException {
@@ -147,7 +156,7 @@ public class ReservationService {
 		}
 	}
 
-	public long nbOfDaysInARowTheVehicleIsReserved(Reservation reservationATester) {
+	public long nbOfDaysInARowTheVehicleIsReserved(Reservation reservationATester) throws ServiceException {
 		long nb_afile_30daysBefore = 0;
 		long nb_afile_30daysAfter = 0;
 		long nb_jour_resa_consecutive = 0;
@@ -195,10 +204,25 @@ public class ReservationService {
 			nb_jour_resa_consecutive = nb_afile_30daysBefore + nb_afile_30daysAfter + nb_jour_reservation;
 
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
-			System.out.print(e.getMessage());
+			throw new ServiceException(e.getMessage());
 		}
 		return nb_jour_resa_consecutive;
+
+	}
+
+	public boolean vehicleIsAlreadyBookeddAtTheSameTime(Reservation reservationATester) throws ServiceException {
+		List<Reservation> list_resa_of_vehicle_in_same_period;
+		try {
+			list_resa_of_vehicle_in_same_period = reservationDao
+					.findResaOfVehicleInPeriodOfOtherReservation(reservationATester);
+			if (list_resa_of_vehicle_in_same_period.size() > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+		}
 
 	}
 

@@ -149,7 +149,12 @@ public class UiReservation {
 			vehicle.setId(vehicleId);
 			reservationATester.setVehicle(vehicle);
 			reservationATester.setClient(new Client());
-			reservation_service.nbOfDaysInARowTheVehicleIsReserved(reservationATester);
+			try {
+				reservation_service.nbOfDaysInARowTheVehicleIsReserved(reservationATester);
+			} catch (ServiceException e) {
+				// TODO Auto-generated catch block
+				System.out.print(e.getMessage());
+			}
 			
 			/*for(Reservation reservation : listResaOfVehicle) {
 				IOUtils.print(reservation.toString());

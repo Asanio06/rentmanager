@@ -64,7 +64,7 @@ public class ReservationCreateServlet extends HttpServlet {
 		try {
 			
 			Reservation reservation = new Reservation();
-			
+			reservation.setId(0);
 			Client client = new Client();
 			client.setId(Long.parseLong(request.getParameter("client")));
 			reservation.setClient(client);
