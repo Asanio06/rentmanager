@@ -51,6 +51,9 @@ public class ClientCreateServlet extends HttpServlet{
 			client.setEmail(request.getParameter("email"));
 			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
 			
+			if (client.getNom().isEmpty() || client.getPrenom().isEmpty()) {
+				throw new ServiceException("Nom ou prénom incorrect");
+			}
 			if(!IOUtils.isValidMail(client.getEmail())) {
 				throw new ServiceException("Adresse mail non valide");
 			}

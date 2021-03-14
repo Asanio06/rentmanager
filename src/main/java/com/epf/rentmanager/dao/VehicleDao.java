@@ -26,7 +26,7 @@ public class VehicleDao {
 	private static final String UPDATE_VEHICLE_QUERY = "UPDATE Vehicle SET constructeur = ?, modele = ?, nb_places = ? WHERE id = ?;";
 	private static final String COUNT_VEHICLE_QUERY = "SELECT COUNT(id) AS count FROM Vehicle;";
 	private static final String FIND_DISTINCT_VEHICLES_RESA_BY_CLIENT_QUERY =
-			"SELECT  DISTINCT Vehicle.id,Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
+			"SELECT  DISTINCT ON (Vehicle.id) Vehicle.id,Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "

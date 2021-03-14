@@ -32,7 +32,7 @@ public class ClientDao {
 	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client Set nom=?,prenom=?,email=?,naissance=? WHERE id=?";
 	private static final String COUNT_CLIENT_QUERY = "SELECT COUNT(id) AS count FROM Client;";
 	private static final String FIND_DISTINCT_CLIENTS__BY_VEHICLE_USED_QUERY =
-			"SELECT  DISTINCT Client.id,Client.nom, Client.prenom, Client.email, Client.naissance "
+			"SELECT  DISTINCT ON (Client.id) Client.id,Client.nom, Client.prenom, Client.email, Client.naissance "
 			+ "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "

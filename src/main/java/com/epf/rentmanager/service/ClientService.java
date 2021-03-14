@@ -31,14 +31,6 @@ public class ClientService {
 
 	public long create(Client client) throws ServiceException {
 
-		if (client.getNom().isEmpty()) {
-			throw new ServiceException("Veuillez Saisir un nom");
-		}
-
-		if (client.getPrenom().isEmpty()) {
-			throw new ServiceException("Veuillez Saisir un prenom");
-		}
-		
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
@@ -74,14 +66,7 @@ public class ClientService {
 
 	public boolean updateClient(Client client) throws ServiceException {
 
-		if (client.getNom().isEmpty()) {
-			throw new ServiceException("Veuillez Saisir un nom");
-		}
 
-		if (client.getPrenom().isEmpty()) {
-			throw new ServiceException("Veuillez Saisir un prenom");
-		}
-		
 		if(client.getAge()<=18) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
