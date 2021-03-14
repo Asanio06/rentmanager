@@ -156,6 +156,11 @@ public class IOUtils {
 
 	}
 	
+	/**
+	 * 
+	 * @param email
+	 * @return
+	 */
 	public static boolean isValidMail(String email) {
 		String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." + "[a-zA-Z0-9_+&*-]+)*@" + "(?:[a-zA-Z0-9-]+\\.)+[a-z"
 				+ "A-Z]{2,7}$";

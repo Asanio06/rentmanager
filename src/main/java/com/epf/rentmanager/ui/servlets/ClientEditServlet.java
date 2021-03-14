@@ -17,59 +17,63 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
-
+import com.epf.rentmanager.utils.IOUtils;
 
 @WebServlet("/clients/edit")
-public class ClientEditServlet extends HttpServlet{
-	
+public class ClientEditServlet extends HttpServlet {
+
 	@Autowired
-	private ClientService clientService ;
-	
+	private ClientService clientService;
+
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/clients/edit.jsp");
 			long clientId = Long.parseLong(request.getParameter("id"));
 			Client client = clientService.findById(clientId);
-			request.setAttribute("client",client );
+			request.setAttribute("client", client);
 			requestDispatcher.forward(request, response);
-		}catch (ServiceException e) {
+		} catch (ServiceException e) {
 			System.out.print(e.getMessage());
 		}
-		
+
 	}
-	
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-			boolean success = false;
-			String errorMessage = "";
-			try {
-				Client client = new Client();
-				client.setId(Long.parseLong(request.getParameter("id")));
-				client.setNom(request.getParameter("last_name"));
-				client.setPrenom(request.getParameter("first_name"));
-				client.setEmail(request.getParameter("email"));
-				client.setNaissance(Date.valueOf(request.getParameter("naissance")));
-				clientService.updateClient(client);
-				success = true;
-			} catch (ServiceException e) {
-				errorMessage = e.getMessage();
-			}finally {
-				if(success) {
-					response.sendRedirect("http://localhost:8080/rentmanager/clients");
-				}else {
-					request.setAttribute("error_message", errorMessage);
-					doGet(request, response);
-				}
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		boolean success = false;
+		String errorMessage = "";
+		try {
+			Client client = new Client();
+			client.setId(Long.parseLong(request.getParameter("id")));
+			client.setNom(request.getParameter("last_name"));
+			client.setPrenom(request.getParameter("first_name"));
+			client.setEmail(request.getParameter("email"));
+			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
+			if (!IOUtils.isValidMail(client.getEmail())) {
+				throw new ServiceException("Adresse mail non valide");
 			}
-		
+			clientService.updateClient(client);
+			success = true;
+		} catch (ServiceException e) {
+			errorMessage = e.getMessage();
+		} finally {
+			if (success) {
+				response.sendRedirect("http://localhost:8080/rentmanager/clients");
+			} else {
+				request.setAttribute("error_message", errorMessage);
+				doGet(request, response);
+			}
+		}
+
 	}
 
 }

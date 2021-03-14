@@ -19,6 +19,7 @@ import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.service.ClientService;
+import com.epf.rentmanager.utils.IOUtils;
 
 @WebServlet("/clients/create")
 public class ClientCreateServlet extends HttpServlet{
@@ -49,6 +50,10 @@ public class ClientCreateServlet extends HttpServlet{
 			client.setPrenom(request.getParameter("first_name"));
 			client.setEmail(request.getParameter("email"));
 			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
+			
+			if(!IOUtils.isValidMail(client.getEmail())) {
+				throw new ServiceException("Adresse mail non valide");
+			}
 			
 			clientService.create(client);
 			success = true;
