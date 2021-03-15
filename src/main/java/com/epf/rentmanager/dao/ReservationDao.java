@@ -59,31 +59,40 @@ public class ReservationDao {
 			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
 			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " + "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
-			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
-			+ "WHERE Reservation.vehicle_id = ? "
-			+ "AND Reservation.fin BETWEEN ? AND ? "
-			+ "AND Reservation.id != ? "
-			+ "ORDER BY Reservation.fin DESC;";
-	
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id " + "WHERE Reservation.vehicle_id = ? "
+			+ "AND Reservation.fin BETWEEN ? AND ? " + "AND Reservation.id != ? " + "ORDER BY Reservation.fin DESC;";
+
 	private static final String FIND_RESERVATION_30_DAYS_AFTER_BY_VEHICLE_QUERY = "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
 			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
 			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " + "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
-			+ "WHERE Reservation.vehicle_id = ? AND Reservation.debut BETWEEN ? AND ? "
-			+ "AND Reservation.id != ? "
+			+ "WHERE Reservation.vehicle_id = ? AND Reservation.debut BETWEEN ? AND ? " + "AND Reservation.id != ? "
 			+ "ORDER BY Reservation.debut ASC;";
-	
-	private static final String FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION= "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+
+	private static final String FIND_RESERVATION_7_DAYS_BEFORE_BY_VEHICLE_AND_CLIENT_QUERY = "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
 			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
-			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " 
-			+ "FROM Reservation "
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " + "FROM Reservation "
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
-			+ "WHERE Reservation.vehicle_id = ? "
+			+ "WHERE Reservation.vehicle_id = ?  AND Reservation.client_id = ? "
+			+ "AND Reservation.fin BETWEEN ? AND ? " + "AND Reservation.id != ? " + "ORDER BY Reservation.fin DESC;";
+
+	private static final String FIND_RESERVATION_7_DAYS_AFTER_BY_VEHICLE_AND_CLIENT_QUERY = "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " + "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
+			+ "WHERE Reservation.vehicle_id = ? AND Reservation.client_id = ? AND Reservation.debut BETWEEN ? AND ? "
+			+ "AND Reservation.id != ? " + "ORDER BY Reservation.debut ASC;";
+
+	private static final String FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION = "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
+			+ "Client.nom, Client.prenom,Client.email, Client.naissance, "
+			+ "Vehicle.constructeur, Vehicle.modele, Vehicle.nb_places " + "FROM Reservation "
+			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id " + "WHERE Reservation.vehicle_id = ? "
 			+ "AND ( ? BETWEEN Reservation.debut AND Reservation.fin OR ? BETWEEN Reservation.debut AND Reservation.fin ) "
-			+ "AND Reservation.id != ? "
-			+ "ORDER BY Reservation.debut ASC;";
+			+ "AND Reservation.id != ? " + "ORDER BY Reservation.debut ASC;";
 
 	public long create(Reservation reservation) throws DaoException {
 
@@ -287,7 +296,7 @@ public class ReservationDao {
 				list_reservation.add(reservation);
 
 			}
-			
+
 			resultSet.close();
 			ps.close();
 			connection.close();
@@ -297,7 +306,7 @@ public class ReservationDao {
 		}
 
 	}
-	
+
 	public List<Reservation> findResaOf30DayAfterByVehicle(Reservation reservationATester) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -337,7 +346,7 @@ public class ReservationDao {
 				list_reservation.add(reservation);
 
 			}
-			
+
 			resultSet.close();
 			ps.close();
 			connection.close();
@@ -347,14 +356,16 @@ public class ReservationDao {
 		}
 
 	}
-	
-	public List<Reservation> findResaOfVehicleInPeriodOfOtherReservation(Reservation reservationATester) throws DaoException {
+
+	public List<Reservation> findResaOfVehicleInPeriodOfOtherReservation(Reservation reservationATester)
+			throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION);
+			PreparedStatement ps = connection
+					.prepareStatement(FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION);
 			ps.setLong(1, reservationATester.getVehicle().getId());
 			ps.setDate(2, reservationATester.getDebut());
 			ps.setDate(3, reservationATester.getFin());
@@ -387,7 +398,109 @@ public class ReservationDao {
 				list_reservation.add(reservation);
 
 			}
-			
+
+			resultSet.close();
+			ps.close();
+			connection.close();
+			return list_reservation;
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage());
+		}
+
+	}
+	
+	public List<Reservation> findResaOf7LastDayByVehicleAndClient(Reservation reservationATester) throws DaoException {
+
+		List<Reservation> list_reservation = new ArrayList<>();
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_7_DAYS_BEFORE_BY_VEHICLE_AND_CLIENT_QUERY);
+			ps.setLong(1, reservationATester.getVehicle().getId());
+			ps.setLong(2, reservationATester.getClient().getId());
+			ps.setDate(3, IOUtils.subtractDays(reservationATester.getFin(), 7));
+			ps.setDate(4, reservationATester.getFin());
+			ps.setLong(5, reservationATester.getId());
+			ResultSet resultSet = ps.executeQuery();
+
+			while (resultSet.next()) {
+				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
+
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+
+				reservation.setClient(client);
+
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+
+				reservation.setDebut(resultSet.getDate("debut"));
+				reservation.setFin(resultSet.getDate("fin"));
+
+				list_reservation.add(reservation);
+
+			}
+
+			resultSet.close();
+			ps.close();
+			connection.close();
+			return list_reservation;
+		} catch (SQLException e) {
+			throw new DaoException(e.getMessage());
+		}
+
+	}
+
+	public List<Reservation> findResaOf7DayAfterByVehicleAndClient(Reservation reservationATester) throws DaoException {
+
+		List<Reservation> list_reservation = new ArrayList<>();
+		try {
+
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_7_DAYS_AFTER_BY_VEHICLE_AND_CLIENT_QUERY);
+			ps.setLong(1, reservationATester.getVehicle().getId());
+			ps.setLong(2, reservationATester.getClient().getId());
+			ps.setDate(3, reservationATester.getDebut());
+			ps.setDate(4, IOUtils.addDays(reservationATester.getDebut(), 7));
+			ps.setLong(5, reservationATester.getId());
+			ResultSet resultSet = ps.executeQuery();
+
+			while (resultSet.next()) {
+				Reservation reservation = new Reservation();
+				reservation.setId(resultSet.getLong("id"));
+
+				Client client = new Client();
+				client.setId(resultSet.getInt("client_id"));
+				client.setNom(resultSet.getString("nom"));
+				client.setPrenom(resultSet.getString("prenom"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNaissance(resultSet.getDate("naissance"));
+
+				reservation.setClient(client);
+
+				Vehicle vehicle = new Vehicle();
+				vehicle.setId(resultSet.getLong("vehicle_id"));
+				vehicle.setModele(resultSet.getString("modele"));
+				vehicle.setConstructeur(resultSet.getString("constructeur"));
+				vehicle.setNb_places(resultSet.getShort("nb_places"));
+				reservation.setVehicle(vehicle);
+
+				reservation.setDebut(resultSet.getDate("debut"));
+				reservation.setFin(resultSet.getDate("fin"));
+
+				list_reservation.add(reservation);
+
+			}
+
 			resultSet.close();
 			ps.close();
 			connection.close();
@@ -513,6 +626,5 @@ public class ReservationDao {
 			throw new DaoException(e.getMessage());
 		}
 	}
-	
-	
+
 }

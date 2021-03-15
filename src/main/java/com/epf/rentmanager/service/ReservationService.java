@@ -31,6 +31,10 @@ public class ReservationService {
 			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
+			
+			if(nbOfDaysInARowTheVehicleIsReservedBySameClient(reservation) > 7) {
+				throw new ServiceException("Le véhicule ne dois pas être réservé plus de 7 jours de suite par le même client");
+			}
 
 			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
 				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
@@ -60,9 +64,14 @@ public class ReservationService {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
 
+			if(nbOfDaysInARowTheVehicleIsReservedBySameClient(reservation) > 7) {
+				throw new ServiceException("Le véhicule ne dois pas être réservé plus de 7 jours de suite par le même client");
+			}
+			
 			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
 				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
 			}
+			
 			return reservationDao.update(reservation);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
@@ -202,6 +211,60 @@ public class ReservationService {
 			}
 
 			nb_jour_resa_consecutive = nb_afile_30daysBefore + nb_afile_30daysAfter + nb_jour_reservation;
+
+		} catch (DaoException e) {
+			throw new ServiceException(e.getMessage());
+		}
+		return nb_jour_resa_consecutive;
+
+	}
+	
+	public long nbOfDaysInARowTheVehicleIsReservedBySameClient(Reservation reservationATester) throws ServiceException {
+		long nb_afile_7daysBefore = 0;
+		long nb_afile_7daysAfter = 0;
+		long nb_jour_resa_consecutive = 0;
+		try {
+
+			List<Reservation> list_resa_qui_se_suive_7_daysBefore = new ArrayList<Reservation>();
+			List<Reservation> list_resa_qui_se_suive_7_daysAfter = new ArrayList<Reservation>();
+			List<Reservation> list_resa_7daysBefore = reservationDao.findResaOf7LastDayByVehicleAndClient(reservationATester);
+			List<Reservation> list_resa_7daysAfter = reservationDao.findResaOf7DayAfterByVehicleAndClient(reservationATester);
+			list_resa_7daysBefore.add(0, reservationATester);
+			list_resa_7daysAfter.add(0, reservationATester);
+			long nb_jour_reservation = IOUtils.dateDiff(reservationATester.getDebut(), reservationATester.getFin()) + 1;
+
+			for (int i = 0; i < list_resa_7daysBefore.size() - 1; i++) {
+
+				if (list_resa_7daysBefore.get(i).getDebut()
+						.equals(IOUtils.addDays(list_resa_7daysBefore.get(i + 1).getFin(), 1))) {
+					list_resa_qui_se_suive_7_daysBefore.add(list_resa_7daysBefore.get(i + 1));
+				} else {
+					break;
+				}
+			}
+
+			for (int i = 0; i < list_resa_7daysAfter.size() - 1; i++) {
+				if (list_resa_7daysAfter.get(i).getFin()
+						.equals(IOUtils.subtractDays(list_resa_7daysAfter.get(i + 1).getDebut(), 1))) {
+
+					list_resa_qui_se_suive_7_daysAfter.add(list_resa_7daysAfter.get(i + 1));
+				} else {
+					break;
+				}
+
+			}
+
+			for (Reservation reservation : list_resa_qui_se_suive_7_daysAfter) {
+				nb_afile_7daysAfter += IOUtils.dateDiff(reservation.getDebut(), reservation.getFin()) + 1;
+
+			}
+
+			for (Reservation reservation : list_resa_qui_se_suive_7_daysBefore) {
+				nb_afile_7daysBefore += IOUtils.dateDiff(reservation.getDebut(), reservation.getFin()) + 1;
+
+			}
+
+			nb_jour_resa_consecutive = nb_afile_7daysBefore + nb_afile_7daysAfter + nb_jour_reservation;
 
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
