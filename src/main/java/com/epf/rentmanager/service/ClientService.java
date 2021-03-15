@@ -1,6 +1,5 @@
 package com.epf.rentmanager.service;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -96,14 +95,14 @@ public class ClientService {
 			return true;
 
 		} catch (DaoException e) {
-			
+
 			throw new ServiceException(e.getMessage());
 		}
 
 	}
 
 	public Client findById(long id) throws ServiceException {
-		
+
 		Client client;
 		try {
 			Optional<Client> opt_client = clientDao.findById(id);
@@ -148,7 +147,6 @@ public class ClientService {
 	}
 
 	public List<Client> findAll() throws ServiceException {
-	
 
 		try {
 

@@ -19,6 +19,8 @@ import com.epf.rentmanager.utils.IOUtils;
 @Service
 public class ReservationService {
 	private ReservationDao reservationDao;
+	private int nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur = 7;
+	private int nbDeJourMaxSimultanePourResaVehiculeSansPause = 30;
 
 	@Autowired
 	private ReservationService(ReservationDao reservationDao) {
@@ -31,13 +33,16 @@ public class ReservationService {
 			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
-			
-			if(nbOfDaysInARowTheVehicleIsReservedBySameClient(reservation) > 7) {
-				throw new ServiceException("Le véhicule ne dois pas être réservé plus de 7 jours de suite par le même client");
+
+			if (nbOfDaysInARowTheVehicleIsReservedBySameClient(
+					reservation) > nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur) {
+				throw new ServiceException("Le véhicule ne dois pas être réservé plus de "
+						+ nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur + " jours de suite par le même client");
 			}
 
-			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
-				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= nbDeJourMaxSimultanePourResaVehiculeSansPause) {
+				throw new ServiceException("Le véhicule ne doit pas être réservé plus de "
+						+ nbDeJourMaxSimultanePourResaVehiculeSansPause + " jours de suite");
 			}
 
 			return reservationDao.create(reservation);
@@ -51,7 +56,6 @@ public class ReservationService {
 		try {
 			return reservationDao.delete(reservation);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -64,18 +68,21 @@ public class ReservationService {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
 
-			if(nbOfDaysInARowTheVehicleIsReservedBySameClient(reservation) > 7) {
-				throw new ServiceException("Le véhicule ne dois pas être réservé plus de 7 jours de suite par le même client");
+			if (nbOfDaysInARowTheVehicleIsReservedBySameClient(
+					reservation) > nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur) {
+				throw new ServiceException("Le véhicule ne dois pas être réservé plus de "
+						+ nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur + " jours de suite par le même client");
 			}
-			
-			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= 30) {
-				throw new ServiceException("Le véhicule ne doit pas être réservé plus de 30 jours de suite");
+
+			if (nbOfDaysInARowTheVehicleIsReserved(reservation) >= nbDeJourMaxSimultanePourResaVehiculeSansPause) {
+				throw new ServiceException("Le véhicule ne doit pas être réservé plus de "
+						+ nbDeJourMaxSimultanePourResaVehiculeSansPause + " jours de suite");
 			}
-			
+
 			return reservationDao.update(reservation);
 		} catch (DaoException e) {
 			throw new ServiceException(e.getMessage());
-		} 
+		}
 	}
 
 	public Reservation findById(long id) throws ServiceException {
@@ -218,7 +225,7 @@ public class ReservationService {
 		return nb_jour_resa_consecutive;
 
 	}
-	
+
 	public long nbOfDaysInARowTheVehicleIsReservedBySameClient(Reservation reservationATester) throws ServiceException {
 		long nb_afile_7daysBefore = 0;
 		long nb_afile_7daysAfter = 0;
@@ -227,8 +234,10 @@ public class ReservationService {
 
 			List<Reservation> list_resa_qui_se_suive_7_daysBefore = new ArrayList<Reservation>();
 			List<Reservation> list_resa_qui_se_suive_7_daysAfter = new ArrayList<Reservation>();
-			List<Reservation> list_resa_7daysBefore = reservationDao.findResaOf7LastDayByVehicleAndClient(reservationATester);
-			List<Reservation> list_resa_7daysAfter = reservationDao.findResaOf7DayAfterByVehicleAndClient(reservationATester);
+			List<Reservation> list_resa_7daysBefore = reservationDao
+					.findResaOf7LastDayByVehicleAndClient(reservationATester);
+			List<Reservation> list_resa_7daysAfter = reservationDao
+					.findResaOf7DayAfterByVehicleAndClient(reservationATester);
 			list_resa_7daysBefore.add(0, reservationATester);
 			list_resa_7daysAfter.add(0, reservationATester);
 			long nb_jour_reservation = IOUtils.dateDiff(reservationATester.getDebut(), reservationATester.getFin()) + 1;
