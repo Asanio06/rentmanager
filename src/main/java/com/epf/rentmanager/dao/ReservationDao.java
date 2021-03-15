@@ -62,7 +62,7 @@ public class ReservationDao {
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
 			+ "WHERE Reservation.vehicle_id = ? "
 			+ "AND Reservation.fin BETWEEN ? AND ? "
-			+ "AND Reservation.fin != ? "
+			+ "AND Reservation.id != ? "
 			+ "ORDER BY Reservation.fin DESC;";
 	
 	private static final String FIND_RESERVATION_30_DAYS_AFTER_BY_VEHICLE_QUERY = "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
@@ -71,7 +71,7 @@ public class ReservationDao {
 			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
 			+ "WHERE Reservation.vehicle_id = ? AND Reservation.debut BETWEEN ? AND ? "
-			+ "AND Reservation.debut != ? "
+			+ "AND Reservation.id != ? "
 			+ "ORDER BY Reservation.debut ASC;";
 	
 	private static final String FIND_RESERVATION_OF_VEHICLE_IN_PERIOD_OF_OTHER_RESERVATION= "SELECT Reservation.id, Reservation.vehicle_id, Reservation.debut, Reservation.fin,Reservation.client_id, "
@@ -258,7 +258,7 @@ public class ReservationDao {
 			ps.setLong(1, reservationATester.getVehicle().getId());
 			ps.setDate(2, IOUtils.subtractDays(reservationATester.getFin(), 30));
 			ps.setDate(3, reservationATester.getFin());
-			ps.setDate(4, reservationATester.getFin());
+			ps.setLong(4, reservationATester.getId());
 			ResultSet resultSet = ps.executeQuery();
 
 			while (resultSet.next()) {
@@ -308,7 +308,7 @@ public class ReservationDao {
 			ps.setLong(1, reservationATester.getVehicle().getId());
 			ps.setDate(2, reservationATester.getDebut());
 			ps.setDate(3, IOUtils.addDays(reservationATester.getDebut(), 30));
-			ps.setDate(4, reservationATester.getDebut());
+			ps.setLong(4, reservationATester.getId());
 			ResultSet resultSet = ps.executeQuery();
 
 			while (resultSet.next()) {
