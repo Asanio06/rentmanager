@@ -52,20 +52,24 @@ public class ClientEditServlet extends HttpServlet {
 		boolean success = false;
 		String errorMessage = "";
 		try {
+			
+			
+			if (request.getParameter("last_name").isEmpty() || request.getParameter("first_name").isEmpty()) {
+				throw new ServiceException("Nom ou prénom incorrect");
+			}
+			if (request.getParameter("naissance").isEmpty()) {
+				throw new ServiceException("Veuillez saisir une date de naissance");
+			}
+			if (!IOUtils.isValidMail(request.getParameter("email"))) {
+				throw new ServiceException("Adresse mail non valide");
+			}
+			
 			Client client = new Client();
 			client.setId(Long.parseLong(request.getParameter("id")));
 			client.setNom(request.getParameter("last_name"));
 			client.setPrenom(request.getParameter("first_name"));
 			client.setEmail(request.getParameter("email"));
 			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
-			
-			if (client.getNom().isEmpty() || client.getPrenom().isEmpty()) {
-				throw new ServiceException("Nom ou prénom incorrect");
-			}
-
-			if (!IOUtils.isValidMail(client.getEmail())) {
-				throw new ServiceException("Adresse mail non valide");
-			}
 
 			clientService.updateClient(client);
 			success = true;

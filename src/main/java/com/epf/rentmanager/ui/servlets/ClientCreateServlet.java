@@ -22,61 +22,63 @@ import com.epf.rentmanager.service.ClientService;
 import com.epf.rentmanager.utils.IOUtils;
 
 @WebServlet("/clients/create")
-public class ClientCreateServlet extends HttpServlet{
+public class ClientCreateServlet extends HttpServlet {
 	@Autowired
 	private ClientService clientService;
-	
+
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		RequestDispatcher requestDispacher = request.getRequestDispatcher("/WEB-INF/views/clients/create.jsp");
 		requestDispacher.forward(request, response);
-		
+
 	}
-	
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		String errorMessage = "";
 		try {
+
+			if (request.getParameter("last_name").isEmpty() || request.getParameter("first_name").isEmpty()) {
+				throw new ServiceException("Nom ou prénom incorrect");
+			}
+			if (request.getParameter("naissance").isEmpty()) {
+				throw new ServiceException("Veuillez saisir une date de naissance");
+			}
+			if (!IOUtils.isValidMail(request.getParameter("email"))) {
+				throw new ServiceException("Adresse mail non valide");
+			}
+
 			Client client = new Client();
 			client.setNom(request.getParameter("last_name"));
 			client.setPrenom(request.getParameter("first_name"));
 			client.setEmail(request.getParameter("email"));
 			client.setNaissance(Date.valueOf(request.getParameter("naissance")));
-			
-			if (client.getNom().isEmpty() || client.getPrenom().isEmpty()) {
-				throw new ServiceException("Nom ou prénom incorrect");
-			}
-			if(!IOUtils.isValidMail(client.getEmail())) {
-				throw new ServiceException("Adresse mail non valide");
-			}
-			
+
 			clientService.create(client);
 			success = true;
-			
-			
+
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			 errorMessage = e.getMessage();
-			
-		}finally {
-			if(success) {
+			errorMessage = e.getMessage();
+
+		} finally {
+			if (success) {
 				response.sendRedirect("http://localhost:8080/rentmanager/clients");
-			}else {
+			} else {
 				request.setAttribute("error_message", errorMessage);
 				doGet(request, response);
 			}
 		}
-		
-		
-		
+
 	}
 
 }

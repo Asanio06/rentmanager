@@ -42,6 +42,14 @@ public class VehicleCreateServlet extends HttpServlet{
 		
 		
 		try {
+			if(request.getParameter("manufacturer").isEmpty()) {
+				throw new ServiceException("Veuillez saisir un constructeur");
+			}
+			
+			if(request.getParameter("modele").isEmpty()) {
+				throw new ServiceException("Veuillez saisir un modele");
+			}
+			
 			Vehicle vehicle = new Vehicle();
 			vehicle.setConstructeur(request.getParameter("manufacturer"));
 			vehicle.setModele(request.getParameter("modele"));

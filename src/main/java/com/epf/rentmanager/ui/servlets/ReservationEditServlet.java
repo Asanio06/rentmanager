@@ -22,60 +22,69 @@ import com.epf.rentmanager.service.ReservationService;
 
 @WebServlet("/rents/edit")
 public class ReservationEditServlet extends HttpServlet {
-	
+
 	@Autowired
-	private  ReservationService reservationService;
-	
+	private ReservationService reservationService;
+
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-	
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		try {
 			RequestDispatcher requestDispatcher = request.getRequestDispatcher("/WEB-INF/views/rents/edit.jsp");
 			long reservationId = Long.parseLong(request.getParameter("id"));
 			Reservation reservation = reservationService.findById(reservationId);
 			request.setAttribute("reservation", reservation);
 			requestDispatcher.forward(request, response);
-		}  catch (ServiceException e) {
+		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
-		} 
-		
+		}
+
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		String errorMessage = "";
 		try {
+			if (Long.parseLong(request.getParameter("client")) == 0) {
+				throw new ServiceException("Selection du client incorrecte");
+			}
+
+			if (Long.parseLong(request.getParameter("car")) == 0) {
+				throw new ServiceException("Selection du vehicule incorrecte");
+			}
+
+			if (request.getParameter("begin").isEmpty() || request.getParameter("begin").isEmpty()) {
+				throw new ServiceException("Les dates de début et de fin de réservation semblent incorrectes");
+			}
 			long reservationId = Long.parseLong(request.getParameter("id"));
 			Reservation reservation = reservationService.findById(reservationId);
 
-
-			reservation.setDebut(Date.valueOf(request.getParameter("begin"))) ;
+			reservation.setDebut(Date.valueOf(request.getParameter("begin")));
 			reservation.setFin(Date.valueOf(request.getParameter("end")));
 			reservationService.update(reservation);
 			success = true;
-		}  catch (ServiceException e) {
+		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
 			errorMessage = e.getMessage();
 		} finally {
-			if(success) {
+			if (success) {
 				response.sendRedirect("http://localhost:8080/rentmanager/rents");
-			}else {
+			} else {
 				request.setAttribute("error_message", errorMessage);
 				doGet(request, response);
 			}
 		}
-		
-		
-		
+
 	}
 
 }
