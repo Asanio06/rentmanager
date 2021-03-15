@@ -17,39 +17,45 @@ import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.service.VehicleService;
 
 @WebServlet("/cars/create")
-public class VehicleCreateServlet extends HttpServlet{
-	
+public class VehicleCreateServlet extends HttpServlet {
+
 	@Autowired
 	private VehicleService vehicleService;
-	
+
 	@Override
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
-	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		RequestDispatcher requestDispacher = request.getRequestDispatcher("/WEB-INF/views/vehicles/create.jsp");
 		requestDispacher.forward(request, response);
 	}
-	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		boolean success = false;
 		String errorMessage = "";
-		
-		
+
 		try {
-			if(request.getParameter("manufacturer").isEmpty()) {
+			if (request.getParameter("manufacturer").isEmpty()) {
 				throw new ServiceException("Veuillez saisir un constructeur");
 			}
-			
-			if(request.getParameter("modele").isEmpty()) {
+
+			if (request.getParameter("modele").isEmpty()) {
 				throw new ServiceException("Veuillez saisir un modele");
 			}
-			
+
+			if (Short.parseShort(request.getParameter("seats")) < 2
+					|| Short.parseShort(request.getParameter("seats")) > 9) {
+				throw new ServiceException("Le nombre de place doit être compris en 2 et 9");
+			}
+
 			Vehicle vehicle = new Vehicle();
 			vehicle.setConstructeur(request.getParameter("manufacturer"));
 			vehicle.setModele(request.getParameter("modele"));
@@ -58,16 +64,15 @@ public class VehicleCreateServlet extends HttpServlet{
 			success = true;
 		} catch (ServiceException e) {
 			// TODO Auto-generated catch block
-			errorMessage =  e.getMessage();
-		}finally {
-			if(success) {
+			errorMessage = e.getMessage();
+		} finally {
+			if (success) {
 				response.sendRedirect("http://localhost:8080/rentmanager/cars");
-			}else {
+			} else {
 				request.setAttribute("error_message", errorMessage);
 				doGet(request, response);
 			}
 		}
-		
-		
+
 	}
 }
