@@ -1,12 +1,9 @@
 package com.epf.rentmanager.service;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 
-import org.h2.command.dml.Update;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,7 +38,7 @@ public class ClientService {
 			throw new ServiceException("Le prénom doit contenir au moins 3 caractères");
 		}
 
-		if (client.getAge() <= 18) {
+		if (client.getAge() <= ageMinimalDuClient) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
 
@@ -84,7 +81,7 @@ public class ClientService {
 			throw new ServiceException("Le prénom doit contenir au moins 3 caractères");
 		}
 
-		if (client.getAge() <= 18) {
+		if (client.getAge() <= ageMinimalDuClient) {
 			throw new ServiceException("Vous devez avoir 18 ans ou plus");
 		}
 
@@ -99,14 +96,14 @@ public class ClientService {
 			return true;
 
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
+			
 			throw new ServiceException(e.getMessage());
 		}
 
 	}
 
 	public Client findById(long id) throws ServiceException {
-		// TODO: récupérer un client par son id
+		
 		Client client;
 		try {
 			Optional<Client> opt_client = clientDao.findById(id);
@@ -128,7 +125,6 @@ public class ClientService {
 	}
 
 	public boolean verifyIfEmailIsUse(Client clientATester) throws ServiceException {
-		// TODO: récupérer un client par son id
 		Client client;
 		try {
 			Optional<Client> opt_client = clientDao.findByEmail(clientATester.getEmail());
@@ -152,7 +148,7 @@ public class ClientService {
 	}
 
 	public List<Client> findAll() throws ServiceException {
-		// TODO: récupérer tous les clients
+	
 
 		try {
 
@@ -165,7 +161,6 @@ public class ClientService {
 	}
 
 	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws ServiceException {
-		// TODO: récupérer tous les clients
 
 		try {
 
@@ -182,8 +177,7 @@ public class ClientService {
 		try {
 			return clientDao.nbOfClient();
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
-			throw new ServiceException("Erreur");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
