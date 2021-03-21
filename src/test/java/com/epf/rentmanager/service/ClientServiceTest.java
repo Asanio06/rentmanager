@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Optional;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,8 +33,8 @@ public class ClientServiceTest {
 	@Mock
 	private ClientDao clientDao;
 
-	@Before
-	public void beforeAll() {
+	@BeforeClass
+	public static void before() {
 		System.out.print("*****************************Test of Client service*********************** \n");
 
 	}
@@ -58,6 +59,7 @@ public class ClientServiceTest {
 		// When
 		try {
 			Mockito.when(this.clientDao.create(client)).thenReturn((long) 1);
+
 		} catch (DaoException e) {
 			// TODO Auto-generated catch block
 			fail("Erreur DaoException" + e.getMessage());

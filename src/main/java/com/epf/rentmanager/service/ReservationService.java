@@ -8,12 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.epf.rentmanager.dao.ReservationDao;
-import com.epf.rentmanager.dao.VehicleDao;
 import com.epf.rentmanager.exception.DaoException;
 import com.epf.rentmanager.exception.ServiceException;
-import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
-import com.epf.rentmanager.model.Vehicle;
 import com.epf.rentmanager.utils.IOUtils;
 
 @Service
@@ -30,7 +27,7 @@ public class ReservationService {
 	public long create(Reservation reservation) throws ServiceException {
 
 		try {
-			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
+			if (vehicleIsAlreadyBookedAtTheSameTime(reservation)) {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
 
@@ -64,7 +61,7 @@ public class ReservationService {
 	public int update(Reservation reservation) throws ServiceException {
 
 		try {
-			if (vehicleIsAlreadyBookeddAtTheSameTime(reservation)) {
+			if (vehicleIsAlreadyBookedAtTheSameTime(reservation)) {
 				throw new ServiceException("Le véhicule est déjà réservé sur la même période");
 			}
 
@@ -86,7 +83,7 @@ public class ReservationService {
 	}
 
 	public Reservation findById(long id) throws ServiceException {
-		// TODO: récupérer un client par son id
+
 		Reservation reservation;
 		try {
 			Optional<Reservation> opt_reservation = reservationDao.findById(id);
@@ -112,7 +109,7 @@ public class ReservationService {
 		try {
 			return reservationDao.findResaByClientId(clientId);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
+
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -123,7 +120,7 @@ public class ReservationService {
 		try {
 			return reservationDao.findResaByVehicleId(vehiculeId);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
+
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -134,7 +131,6 @@ public class ReservationService {
 		try {
 			return reservationDao.findResaOf30LastDayByVehicle(reservation);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -145,19 +141,17 @@ public class ReservationService {
 		try {
 			return reservationDao.findResaOf30DayAfterByVehicle(reservation);
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
 			throw new ServiceException(e.getMessage());
 		}
 
 	}
 
 	public List<Reservation> findAll() throws ServiceException {
-		// TODO: récupérer tous les clients
 
 		try {
 			return reservationDao.findAll();
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
+
 			throw new ServiceException(e.getMessage());
 		}
 
@@ -167,7 +161,7 @@ public class ReservationService {
 		try {
 			return reservationDao.nbOfResa();
 		} catch (DaoException e) {
-			// TODO Auto-generated catch block
+
 			throw new ServiceException("Erreur");
 		}
 	}
@@ -238,6 +232,7 @@ public class ReservationService {
 					.findResaOf7LastDayByVehicleAndClient(reservationATester);
 			List<Reservation> list_resa_7daysAfter = reservationDao
 					.findResaOf7DayAfterByVehicleAndClient(reservationATester);
+
 			list_resa_7daysBefore.add(0, reservationATester);
 			list_resa_7daysAfter.add(0, reservationATester);
 			long nb_jour_reservation = IOUtils.dateDiff(reservationATester.getDebut(), reservationATester.getFin()) + 1;
@@ -282,7 +277,7 @@ public class ReservationService {
 
 	}
 
-	public boolean vehicleIsAlreadyBookeddAtTheSameTime(Reservation reservationATester) throws ServiceException {
+	public boolean vehicleIsAlreadyBookedAtTheSameTime(Reservation reservationATester) throws ServiceException {
 		List<Reservation> list_resa_of_vehicle_in_same_period;
 		try {
 			list_resa_of_vehicle_in_same_period = reservationDao

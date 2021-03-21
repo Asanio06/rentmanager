@@ -21,24 +21,17 @@ import com.epf.rentmanager.persistence.ConnectionManager;
 @Repository
 public class ClientDao {
 
-
-
-
-
 	private static final String CREATE_CLIENT_QUERY = "INSERT INTO Client(nom, prenom, email, naissance) VALUES(?, ?, ?, ?);";
 	private static final String DELETE_CLIENT_QUERY = "DELETE FROM Client WHERE id=?;";
 	private static final String FIND_CLIENT_QUERY = "SELECT nom, prenom, email, naissance FROM Client WHERE id=?;";
 	private static final String FIND_CLIENTS_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client;";
 	private static final String UPDATE_CLIENT_QUERY = "UPDATE Client Set nom=?,prenom=?,email=?,naissance=? WHERE id=?";
 	private static final String COUNT_CLIENT_QUERY = "SELECT COUNT(id) AS count FROM Client;";
-	private static final String FIND_DISTINCT_CLIENTS__BY_VEHICLE_USED_QUERY =
-			"SELECT  DISTINCT ON (Client.id) Client.id,Client.nom, Client.prenom, Client.email, Client.naissance "
-			+ "FROM Reservation "
-			+ "INNER JOIN Client ON Reservation.client_id= Client.id "
-			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id "
-			+ "WHERE Reservation.vehicle_id = ?";
+	private static final String FIND_DISTINCT_CLIENTS__BY_VEHICLE_USED_QUERY = "SELECT  DISTINCT ON (Client.id) Client.id,Client.nom, Client.prenom, Client.email, Client.naissance "
+			+ "FROM Reservation " + "INNER JOIN Client ON Reservation.client_id= Client.id "
+			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id " + "WHERE Reservation.vehicle_id = ?";
 	private static final String FIND_CLIENT_BY_EMAIL_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE Client.email = ?";
-	
+
 	public long create(Client client) throws DaoException {
 		long id = 0;
 		try {
@@ -121,9 +114,9 @@ public class ClientDao {
 		}
 
 	}
-	
-	public boolean update(Client client) throws DaoException{
-		
+
+	public boolean update(Client client) throws DaoException {
+
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
@@ -137,18 +130,17 @@ public class ClientDao {
 			int nb_ligne_update = ps.executeUpdate();
 			ps.close();
 			connection.close();
-			if(nb_ligne_update >= 1) {
+			if (nb_ligne_update >= 1) {
 				return true;
-			}else {
+			} else {
 				return false;
 			}
-			
 
 		} catch (SQLException e) {
 			throw new DaoException(e.getMessage());
 
 		}
-		
+
 	}
 
 	public List<Client> findAll() throws DaoException {
@@ -178,8 +170,8 @@ public class ClientDao {
 		return list_client;
 
 	}
-	
-	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws DaoException{
+
+	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws DaoException {
 		List<Client> list_client = new ArrayList<>();
 		try {
 
@@ -200,13 +192,13 @@ public class ClientDao {
 			resultSet.close();
 			ps.close();
 			connection.close();
-			
+
 			return list_client;
 		} catch (SQLException e) {
 			throw new DaoException(e.getMessage());
 		}
 	}
-	
+
 	public int nbOfClient() throws DaoException {
 		try {
 			int nbOfClient = 0;
@@ -218,19 +210,19 @@ public class ClientDao {
 			if (resultSet.next()) {
 				nbOfClient = resultSet.getInt("count");
 			}
-			
+
 			resultSet.close();
 			ps.close();
 			connection.close();
 
 			return nbOfClient;
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			throw new DaoException(e.getMessage());
 		}
 	}
-	
+
 	public Optional<Client> findByEmail(String email) throws DaoException {
 		Optional<Client> opt_client;
 
@@ -266,7 +258,5 @@ public class ClientDao {
 		}
 
 	}
-	
-	
 
 }

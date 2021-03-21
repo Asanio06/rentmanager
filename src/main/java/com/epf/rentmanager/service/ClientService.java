@@ -87,7 +87,7 @@ public class ClientService {
 		if (verifyIfEmailIsUse(client)) {
 			throw new ServiceException("L'adresse mail est déjà utilisé");
 		}
-
+		System.out.print(client);
 		client.setNom(client.getNom().toUpperCase());
 
 		try {
