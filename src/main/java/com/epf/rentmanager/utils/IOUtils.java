@@ -150,6 +150,20 @@ public class IOUtils {
         return new Date(c.getTimeInMillis());
     }
 	
+	public static Date subtractYear(Date date, int year) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, -year);
+        return new Date(c.getTimeInMillis());
+    }
+	
+	public static Date addYear(Date date, int year) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.YEAR, year);
+        return new Date(c.getTimeInMillis());
+    }
+	
 	public static long dateDiff(Date date1, Date date2) {
 		
 		return ChronoUnit.DAYS.between(LocalDate.parse(date1.toString()),LocalDate.parse(date2.toString()));
