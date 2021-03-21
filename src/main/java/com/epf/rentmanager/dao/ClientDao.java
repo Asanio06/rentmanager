@@ -32,6 +32,12 @@ public class ClientDao {
 			+ "INNER JOIN Vehicle ON Reservation.vehicle_id = Vehicle.id " + "WHERE Reservation.vehicle_id = ?";
 	private static final String FIND_CLIENT_BY_EMAIL_QUERY = "SELECT id, nom, prenom, email, naissance FROM Client WHERE Client.email = ?";
 
+	/**
+	 * Permet d'utiliser une requête SQL afin d'insérer un client dans la base de données
+	 * @param client l'objet client représentant le client qu'on souhaite ajouter à la base de données
+	 * @return l'identifiant du client qui vient d'être insérer dans la base de données
+	 * @throws DaoException 
+	 */
 	public long create(Client client) throws DaoException {
 		long id = 0;
 		try {
@@ -60,15 +66,21 @@ public class ClientDao {
 
 	}
 
+	/**
+	 * Permet d'utiliser une requête SQL afin de supprimer un client dans la base de données
+	 * @param client objet de la classe Client représentant le client qu'on souhaite ajouter à la base de données
+	 * @return nombre de ligne modifié dans la base de données
+	 * @throws DaoException 
+	 */
 	public long delete(Client client) throws DaoException {
-		// long id = 2; // A modifier
+		long nb_ligne_modifie = 2; 
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement ps = connection.prepareStatement(DELETE_CLIENT_QUERY);
 			ps.setLong(1, client.getId());
 
-			ps.executeUpdate();
+			nb_ligne_modifie = ps.executeUpdate();
 			ps.close();
 			connection.close();
 
@@ -76,9 +88,15 @@ public class ClientDao {
 			throw new DaoException(e.getMessage());
 		}
 
-		return 1;
+		return nb_ligne_modifie;
 	}
-
+	
+	/**
+	 * Permet de récupérer un Objet Optional<Client> en fonction de l'id du client
+	 * @param id l'identifiant du client qu'on souhaite récupérer dans la base de données
+	 * @return Un Optional<Client> contenant le client s'il existe dans la base de données et null sinon
+	 * @throws DaoException
+	 */
 	public Optional<Client> findById(long id) throws DaoException {
 		Optional<Client> opt_client;
 
@@ -114,7 +132,13 @@ public class ClientDao {
 		}
 
 	}
-
+	
+	/**
+	 * Permet d'utiliser une requête SQL afin de mettre à jour un client dans la base de données
+	 * @param client l'objet client représentant le client qu'on souhaite ajouter à la base de données
+	 * @return true si la mise à jour à eu lieu; false sinon
+	 * @throws DaoException 
+	 */
 	public boolean update(Client client) throws DaoException {
 
 		try {
@@ -143,6 +167,11 @@ public class ClientDao {
 
 	}
 
+	/**
+	 * Permet d'obtenir la liste des clients présents dans la base de donnés
+	 * @return La liste des clients présents dans la base de données
+	 * @throws DaoException
+	 */
 	public List<Client> findAll() throws DaoException {
 		List<Client> list_client = new ArrayList<>();
 		try {
@@ -170,7 +199,13 @@ public class ClientDao {
 		return list_client;
 
 	}
-
+	
+	/**
+	 * Permet de récupérer la liste des clients distinct ayant réserver un véhicule particulier
+	 * @param vehicle le vehicule sur lequel on souhaite appliquer la recherche
+	 * @return la liste des clients distinct ayant réserver un véhicule particulier
+	 * @throws DaoException
+	 */
 	public List<Client> findDistinctClientByVehicleUsed(Vehicle vehicle) throws DaoException {
 		List<Client> list_client = new ArrayList<>();
 		try {
@@ -199,6 +234,10 @@ public class ClientDao {
 		}
 	}
 
+	/**
+	 * @return le nombre de client présent dans la base de données
+	 * @throws DaoException
+	 */
 	public int nbOfClient() throws DaoException {
 		try {
 			int nbOfClient = 0;
@@ -223,6 +262,12 @@ public class ClientDao {
 		}
 	}
 
+	/**
+	 * Permet de récupérer un Optional<Client> de la base de données grâce à son email
+	 * @param email L'email du client qu'on veut retrouver
+	 * @return Un Optional<Client> contenant le client s'il existe dans la base de données et null sinon
+	 * @throws DaoException
+	 */
 	public Optional<Client> findByEmail(String email) throws DaoException {
 		Optional<Client> opt_client;
 
