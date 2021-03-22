@@ -45,6 +45,13 @@ public class ReservationServiceTest {
 	@Test
 	public void createShouldThrowExceptionIfVehicleIsAlreadyReservedTest() {
 
+		try {
+			Mockito.when(reservationService.vehicleIsAlreadyBookedAtTheSameTime(Mockito.any(Reservation.class)))
+					.thenReturn(false);
+		} catch (ServiceException e) {
+			fail("Erreur ServiceException" + e.getMessage());
+		}
+
 	}
 
 	@Test
@@ -106,7 +113,7 @@ public class ReservationServiceTest {
 		}
 
 		try {
-			assertEquals(7,reservationService.nbOfDaysInARowTheVehicleIsReservedBySameClient(reservationATester));
+			assertEquals(7, reservationService.nbOfDaysInARowTheVehicleIsReservedBySameClient(reservationATester));
 
 		} catch (ServiceException e) {
 			fail("Erreur ServiceException" + e.getMessage());
@@ -124,7 +131,6 @@ public class ReservationServiceTest {
 
 		Vehicle vehicle = new Vehicle(1, "Peugeot", "206", Short.parseShort("4"));
 
-		
 		Reservation reservation30DayBeforeForSameVehicle = new Reservation();
 		reservation30DayBeforeForSameVehicle.setClient(client);
 		reservation30DayBeforeForSameVehicle.setVehicle(vehicle);
@@ -140,12 +146,8 @@ public class ReservationServiceTest {
 		list_resa_30daysBefore.add(reservation30DayBeforeForSameVehicle);
 		list_resa_30daysAfter.add(reservation30DayAfterForSameVehicle);
 
-		Reservation reservationATester = new Reservation();
-		reservationATester.setClient(client);
-		reservationATester.setVehicle(vehicle);
-		reservationATester.setDebut(Date.valueOf("2021-03-07"));
-		reservationATester.setFin(Date.valueOf("2021-03-09"));
 		
+
 		try {
 			Mockito.when(reservationDao.findResaOf30LastDayByVehicle(Mockito.any(Reservation.class)))
 					.thenReturn(list_resa_30daysBefore);
@@ -155,15 +157,19 @@ public class ReservationServiceTest {
 		} catch (DaoException e) {
 			fail("Erreur DaoException" + e.getMessage());
 		}
+		
+		Reservation reservationATester = new Reservation();
+		reservationATester.setClient(client);
+		reservationATester.setVehicle(vehicle);
+		reservationATester.setDebut(Date.valueOf("2021-03-07"));
+		reservationATester.setFin(Date.valueOf("2021-03-09"));
 
 		try {
-			assertEquals(30,reservationService.nbOfDaysInARowTheVehicleIsReserved(reservationATester));
+			assertEquals(30, reservationService.nbOfDaysInARowTheVehicleIsReserved(reservationATester));
 
 		} catch (ServiceException e) {
 			fail("Erreur ServiceException" + e.getMessage());
 		}
 	}
-	
-	
 
 }
