@@ -16,6 +16,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.epf.rentmanager.exception.DaoException;
+import com.epf.rentmanager.exception.ServiceException;
 import com.epf.rentmanager.model.Client;
 import com.epf.rentmanager.model.Reservation;
 import com.epf.rentmanager.model.Vehicle;
@@ -94,6 +95,14 @@ public class ReservationDao {
 			+ "AND ( ? BETWEEN Reservation.debut AND Reservation.fin OR ? BETWEEN Reservation.debut AND Reservation.fin ) "
 			+ "AND Reservation.id != ? " + "ORDER BY Reservation.debut ASC;";
 
+	/**
+	 * Permet de créer une réservation dans la base de données
+	 * 
+	 * @param reservation la réservation qu'on souhaite insérer dans la base de
+	 *                    données
+	 * @return l'identifiant de la réservation créé dans la base de données
+	 * @throws DaoException
+	 */
 	public long create(Reservation reservation) throws DaoException {
 
 		long id = 0;
@@ -124,6 +133,14 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de supprimer une réservation de la base de données
+	 * 
+	 * @param reservation la réservation qu'on souhaite supprimer de la base de
+	 *                    données
+	 * @return le nombre de ligne affecté par la requête SQL
+	 * @throws ServiceException
+	 */
 	public int delete(Reservation reservation) throws DaoException {
 
 		try {
@@ -144,6 +161,13 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de mettre à jour une réservation dans la base de données
+	 * 
+	 * @param reservation La réservation qu'on souhaite mettre à jour
+	 * @return le nombre de ligne affecté par la requête sql
+	 * @throws DaoException
+	 */
 	public int update(Reservation reservation) throws DaoException {
 
 		try {
@@ -167,6 +191,13 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste des réservation d'un client
+	 * 
+	 * @param clientId L'identifiant du client
+	 * @return La liste des réservation du client
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaByClientId(long clientId) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -213,6 +244,13 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste des réservations faites pour un véhicule
+	 * 
+	 * @param vehicleId L'identifiant du véhicule
+	 * @return La liste des réservations faites pour le véhicule
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaByVehicleId(long vehicleId) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -257,6 +295,15 @@ public class ReservationDao {
 		}
 	}
 
+	/**
+	 * Cette fonction permet de récupérer la liste des réservations qui ont eu lieu
+	 * sur un véhicule les 30jours avant une réservation donner en entré
+	 * 
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return La liste des réservations qui ont eu lieu sur le véhicule les 30jours
+	 *         avant la réservation en entré
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaOf30LastDayByVehicle(Reservation reservationATester) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -307,6 +354,15 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Cette fonction permet de récupérer la liste des réservations qui ont eu lieu
+	 * sur un véhicule les 30jours après une réservation donner en entré
+	 * 
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return La liste des réservations qui ont eu lieu sur le véhicule les 30jours
+	 *         avant la réservation en entré
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaOf30DayAfterByVehicle(Reservation reservationATester) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -357,6 +413,15 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Cette fonction permet de récupérer la liste des réservations d'un véhicule
+	 * dont la période interfère avec une réservation de ce même véhicule
+	 * 
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return La liste des réservations d'un véhicule dont la période interfère
+	 *         avec une réservation de ce même véhicule
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaOfVehicleInPeriodOfOtherReservation(Reservation reservationATester)
 			throws DaoException {
 
@@ -408,14 +473,25 @@ public class ReservationDao {
 		}
 
 	}
-	
+
+	/**
+	 * Cette fonction permet de récupérer la liste des réservations qui ont eu lieu
+	 * sur un véhicule et pour un client les 7jours avant une réservation donner en
+	 * entré
+	 * 
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return La liste des réservations qui ont eu lieu sur un véhicule et pour un
+	 *         client les 7jours avant la réservation en entré
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaOf7LastDayByVehicleAndClient(Reservation reservationATester) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_7_DAYS_BEFORE_BY_VEHICLE_AND_CLIENT_QUERY);
+			PreparedStatement ps = connection
+					.prepareStatement(FIND_RESERVATION_7_DAYS_BEFORE_BY_VEHICLE_AND_CLIENT_QUERY);
 			ps.setLong(1, reservationATester.getVehicle().getId());
 			ps.setLong(2, reservationATester.getClient().getId());
 			ps.setDate(3, IOUtils.subtractDays(reservationATester.getFin(), 7));
@@ -460,13 +536,24 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Cette fonction permet de récupérer la liste des réservations qui ont eu lieu
+	 * sur un véhicule et pour un client les 7jours après une réservation donner en
+	 * entré
+	 * 
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return La liste des réservations qui ont eu lieu sur un véhicule et pour un
+	 *         client les 7jours après la réservation en entré
+	 * @throws DaoException
+	 */
 	public List<Reservation> findResaOf7DayAfterByVehicleAndClient(Reservation reservationATester) throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
 		try {
 
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement ps = connection.prepareStatement(FIND_RESERVATION_7_DAYS_AFTER_BY_VEHICLE_AND_CLIENT_QUERY);
+			PreparedStatement ps = connection
+					.prepareStatement(FIND_RESERVATION_7_DAYS_AFTER_BY_VEHICLE_AND_CLIENT_QUERY);
 			ps.setLong(1, reservationATester.getVehicle().getId());
 			ps.setLong(2, reservationATester.getClient().getId());
 			ps.setDate(3, reservationATester.getDebut());
@@ -511,6 +598,12 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste de toutes les réservations de la base de données
+	 * 
+	 * @return La liste de toutes les réservations présentes dans la base de données
+	 * @throws DaoException
+	 */
 	public List<Reservation> findAll() throws DaoException {
 
 		List<Reservation> list_reservation = new ArrayList<>();
@@ -555,6 +648,15 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de récupérer un Objet Optional<Reservation> en fonction de l'id de la
+	 * réservation
+	 * 
+	 * @param Id L'identifiant de la réservation
+	 * @return Un Optional <Reservation> contenant la réservation s'elle existe dans
+	 *         la base de données et null sinon
+	 * @throws DaoException
+	 */
 	public Optional<Reservation> findById(long Id) throws DaoException {
 
 		Optional<Reservation> opt_resa;
@@ -603,6 +705,12 @@ public class ReservationDao {
 
 	}
 
+	/**
+	 * Permet de récupérer le nombre de réservation présent dans la base de données
+	 * 
+	 * @return Le nombre de réservation présent dans la base de données
+	 * @throws DaoException
+	 */
 	public int nbOfResa() throws DaoException {
 		try {
 

@@ -16,14 +16,22 @@ import com.epf.rentmanager.utils.IOUtils;
 @Service
 public class ReservationService {
 	private ReservationDao reservationDao;
-	private int nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur = 7;
-	private int nbDeJourMaxSimultanePourResaVehiculeSansPause = 30;
+	int nbDeJourMaxSimultanePourResaVehiculeParUnUtilisateur = 7;
+	int nbDeJourMaxSimultanePourResaVehiculeSansPause = 30;
 
 	@Autowired
 	private ReservationService(ReservationDao reservationDao) {
 		this.reservationDao = reservationDao;
 	}
 
+	/**
+	 * Permet de créer une réservation dans la base de données si les contraintes métier sont validés
+	 * 
+	 * @param reservation la réservation qu'on souhaite insérer dans la base de
+	 *                    données
+	 * @return l'identifiant de la réservation créé dans la base de données
+	 * @throws ServiceException
+	 */
 	public long create(Reservation reservation) throws ServiceException {
 
 		try {
@@ -48,6 +56,14 @@ public class ReservationService {
 		}
 	}
 
+	/**
+	 * Permet de supprimer une réservation de la base de données
+	 * 
+	 * @param reservation la réservation qu'on souhaite supprimer de la base de
+	 *                    données
+	 * @return le nombre de ligne affecté par la requête SQL
+	 * @throws ServiceException
+	 */
 	public int delete(Reservation reservation) throws ServiceException {
 
 		try {
@@ -58,6 +74,13 @@ public class ReservationService {
 
 	}
 
+	/**
+	 * Permet de mettre à jour une réservation dans la base de données si les contraintes métier sont respectés
+	 * 
+	 * @param reservation La réservation qu'on souhaite mettre à jour
+	 * @return Le nombre de ligne affecté par la requête sql
+	 * @throws ServiceException
+	 */
 	public int update(Reservation reservation) throws ServiceException {
 
 		try {
@@ -82,6 +105,14 @@ public class ReservationService {
 		}
 	}
 
+	/**
+	 * Permet de récupérer une réservation de la base de données en fonction de son id
+	 * 
+	 * @param id l'identifiant de la réservation qu'on souhaite récupérer dans la base de
+	 *           données
+	 * @return la réservation récupéré de la base de données
+	 * @throws ServiceException
+	 */
 	public Reservation findById(long id) throws ServiceException {
 
 		Reservation reservation;
@@ -104,6 +135,13 @@ public class ReservationService {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste des réservation d'un client
+	 * 
+	 * @param clientId L'identifiant du client
+	 * @return La liste des réservation du client
+	 * @throws ServiceException
+	 */
 	public List<Reservation> findResaByClientId(long clientId) throws ServiceException {
 
 		try {
@@ -115,6 +153,13 @@ public class ReservationService {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste des réservations faites pour un véhicule
+	 * 
+	 * @param vehicleId L'identifiant du véhicule
+	 * @return La liste des réservations faites pour le véhicule
+	 * @throws ServiceException
+	 */
 	public List<Reservation> findResaByVehicleId(long vehiculeId) throws ServiceException {
 
 		try {
@@ -146,6 +191,12 @@ public class ReservationService {
 
 	}
 
+	/**
+	 * Permet de récupérer la liste de toutes les réservations de la base de données
+	 * 
+	 * @return La liste de toutes les réservations présentes dans la base de données
+	 * @throws ServiceException
+	 */
 	public List<Reservation> findAll() throws ServiceException {
 
 		try {
