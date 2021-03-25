@@ -257,7 +257,6 @@ public class ClientDao {
 			return nbOfClient;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			throw new DaoException(e.getMessage());
 		}
 	}

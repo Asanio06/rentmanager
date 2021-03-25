@@ -38,7 +38,6 @@ public class ReservationCreateServlet extends HttpServlet {
 
 	@Override
 	public void init() throws ServletException {
-		// TODO Auto-generated method stub
 		super.init();
 		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
 	}
@@ -52,7 +51,6 @@ public class ReservationCreateServlet extends HttpServlet {
 
 			requestDispatcher.forward(request, response);
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			System.out.print(e.getMessage());
 		}
 	}
@@ -91,7 +89,6 @@ public class ReservationCreateServlet extends HttpServlet {
 			reservationService.create(reservation);
 			success = true;
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			errorMessage = e.getMessage();
 		} finally {
 			if (success) {

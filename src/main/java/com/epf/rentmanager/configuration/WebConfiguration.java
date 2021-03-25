@@ -15,7 +15,6 @@ public class WebConfiguration implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		// TODO Auto-generated method stub
 		AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
 		rootContext.register(AppConfiguration.class);
 		servletContext.addListener(new ContextLoaderListener(rootContext));

@@ -51,7 +51,6 @@ public class ReservationEditServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		boolean success = false;
 		String errorMessage = "";
 		try {
