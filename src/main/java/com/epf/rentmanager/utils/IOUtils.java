@@ -13,7 +13,7 @@ public class IOUtils {
 	
 	/**
 	 * Affiche un message sur la sortie standard
-	 * @param message
+	 * @param message Le message à afficher
 	 */
 	public static void print(String message) {
 		System.out.println(message); 
@@ -21,8 +21,8 @@ public class IOUtils {
 	
 	/**
 	 * Affiche un message sur la sortie standard
-	 * @param message
-	 * @param mandatory
+	 * @param message Le message à afficher
+	 * @param mandatory True si la saisie est obligatoire; False sinon
 	 */
 	public static String readString(String message, boolean mandatory) {
 		print(message);
@@ -55,7 +55,7 @@ public class IOUtils {
 	/**
 	 * Lit un entier sur l'entrée standard
 	 * @param message
-	 * @return
+	 * @return L'entier saisi par l'utilisateur
 	 */
 	public static int readInt(String message) {
 		print(message);
@@ -82,8 +82,8 @@ public class IOUtils {
 	
 	/**
 	 * Lit un entier sur l'entrée standard
-	 * @param message
-	 * @return
+	 * @param message Le message qu'on souhaite afficher avant que l'utilisateur puisse saisir un Short
+	 * @return Le Short saisi par l'utilisateur
 	 */
 	public static short readShort(String message) {
 		print(message);
@@ -110,9 +110,9 @@ public class IOUtils {
 	
 	/**
 	 * Lit une date sur l'entrée standard
-	 * @param message
-	 * @param mandatory
-	 * @return
+	 * @param message Le message qu'on souhaite afficher avant que l'utilisateur puisse saisir une date
+	 * @param mandatory True si la saisie est obligatoire; False sinon
+	 * @return La LocalDate saisie par l'utilisateur
 	 */
 	public static LocalDate readDate(String message, boolean mandatory) {
 		print(message);
@@ -136,6 +136,12 @@ public class IOUtils {
 		return output;
 	}
 	
+	/**
+	 * Permet de soustraire un nombre de jour à une date
+	 * @param date 
+	 * @param days Le nombre de jour qu'on souhaite retirer
+	 * @return La date obtenu après soustraction
+	 */
 	public static Date subtractDays(Date date, int days) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -143,6 +149,12 @@ public class IOUtils {
         return new Date(c.getTimeInMillis());
     }
 	
+	/**
+	 * Permet d'ajouter un nombre de jour à une date
+	 * @param date 
+	 * @param days Le nombre d'années qu'on souhaite retirer
+	 * @return La date obtenu après soustraction
+	 */
 	public static Date addDays(Date date, int days) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -150,6 +162,12 @@ public class IOUtils {
         return new Date(c.getTimeInMillis());
     }
 	
+	/**
+	 * Permet de soustraire un nombre d'années à une date
+	 * @param date 
+	 * @param year Le nombre d'années qu'on souhaite retirer
+	 * @return La date obtenu après soustraction
+	 */
 	public static Date subtractYear(Date date, int year) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -157,6 +175,12 @@ public class IOUtils {
         return new Date(c.getTimeInMillis());
     }
 	
+	/**
+	 * Permet d'ajouter un nombre d'années à une date
+	 * @param date 
+	 * @param year Le nombre d'années qu'on souhaite ajouter
+	 * @return La date obtenu après ajout
+	 */
 	public static Date addYear(Date date, int year) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
@@ -164,6 +188,13 @@ public class IOUtils {
         return new Date(c.getTimeInMillis());
     }
 	
+	
+	/**
+	 * Permet d'obtenir le nombre de jours entre 2 dates
+	 * @param date1
+	 * @param date2
+	 * @return le nombre de jours entre les 2 dates
+	 */
 	public static long dateDiff(Date date1, Date date2) {
 		
 		return ChronoUnit.DAYS.between(LocalDate.parse(date1.toString()),LocalDate.parse(date2.toString()));

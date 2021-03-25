@@ -171,25 +171,7 @@ public class ReservationService {
 
 	}
 
-	public List<Reservation> findResaOf30LastDayByVehicle(Reservation reservation) throws ServiceException {
 
-		try {
-			return reservationDao.findResaOf30LastDayByVehicle(reservation);
-		} catch (DaoException e) {
-			throw new ServiceException(e.getMessage());
-		}
-
-	}
-
-	public List<Reservation> findResaOf30DayAfterByVehicle(Reservation reservation) throws ServiceException {
-
-		try {
-			return reservationDao.findResaOf30DayAfterByVehicle(reservation);
-		} catch (DaoException e) {
-			throw new ServiceException(e.getMessage());
-		}
-
-	}
 
 	/**
 	 * Permet de récupérer la liste de toutes les réservations de la base de données
@@ -208,15 +190,28 @@ public class ReservationService {
 
 	}
 
+	
+	/**
+	 * Permet de récupérer le nombre de réservation présent dans la base de données
+	 * @return Le nombre de réservation présent dans la base de données
+	 * @throws ServiceException
+	 */
 	public int nbOfResa() throws ServiceException {
 		try {
 			return reservationDao.nbOfResa();
 		} catch (DaoException e) {
 
-			throw new ServiceException("Erreur");
+			throw new ServiceException(e.getMessage());
 		}
 	}
 
+	
+	/**
+	 * Permet d'obtenir, pour le véhicule d'une réservation, le nombre de jour d'affilés où le véhiculer est réservé dans une période de 30jours autour de la réseration
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return le nombre de jour d'affilé où le véhicule de la réservation est réservé
+	 * @throws ServiceException
+	 */
 	public long nbOfDaysInARowTheVehicleIsReserved(Reservation reservationATester) throws ServiceException {
 		long nb_afile_30daysBefore = 0;
 		long nb_afile_30daysAfter = 0;
@@ -271,6 +266,13 @@ public class ReservationService {
 
 	}
 
+	
+	/**
+	 * Permet d'obtenir, pour le véhicule d'une réservation, le nombre de jour d'affilés où le véhicule est réservé par un client dans une période de 7jours autour de la réseration
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return le nombre de jour d'affilé où le véhicule de la réservation est réservé par le même client
+	 * @throws ServiceException
+	 */
 	public long nbOfDaysInARowTheVehicleIsReservedBySameClient(Reservation reservationATester) throws ServiceException {
 		long nb_afile_7daysBefore = 0;
 		long nb_afile_7daysAfter = 0;
@@ -328,6 +330,12 @@ public class ReservationService {
 
 	}
 
+	/**
+	 * Permet de vérifier si le véhicule demandé par une réservation est déjà réservé sur la même période
+	 * @param reservationATester La réservation sur laquelle on se base
+	 * @return true si le véhicule est déjà réserver sur la même période; false sinon
+	 * @throws ServiceException
+	 */
 	public boolean vehicleIsAlreadyBookedAtTheSameTime(Reservation reservationATester) throws ServiceException {
 		List<Reservation> list_resa_of_vehicle_in_same_period;
 		try {
