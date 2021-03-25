@@ -55,13 +55,7 @@ public class ReservationEditServlet extends HttpServlet {
 		boolean success = false;
 		String errorMessage = "";
 		try {
-			if (Long.parseLong(request.getParameter("client")) == 0) {
-				throw new ServiceException("Selection du client incorrecte");
-			}
-
-			if (Long.parseLong(request.getParameter("car")) == 0) {
-				throw new ServiceException("Selection du vehicule incorrecte");
-			}
+		
 
 			if (request.getParameter("begin").isEmpty() || request.getParameter("begin").isEmpty()) {
 				throw new ServiceException("Les dates de début et de fin de réservation semblent incorrectes");
