@@ -1,2 +1,14 @@
 # rentmanager
 This is a School exercice
+
+>## Comment lancer l'application web?
+
+Avant tout, exécutez la commande `mvn clean install` 
+
+- Si vous souhaitez lancez l'application web, utilisez `mvn tomcat7:run`
+- Si vous souhaitez lancez l'application en interface de commande , utilisez `mvn java:exec`
+
+
+>## Difficultés 
+
+La fonction la plus difficile à faire a été celle permettant de vérifier qu'un véhicule n'était pas réserver plus de 30 jours de suite sans repos.
