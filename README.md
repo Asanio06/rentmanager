@@ -6,7 +6,9 @@ This is a School exercice
 Avant tout, exécutez la commande `mvn clean install` 
 
 - Si vous souhaitez lancez l'application web, utilisez `mvn tomcat7:run`
-- Si vous souhaitez lancez l'application en interface de commande , utilisez `mvn java:exec`
+- Si vous souhaitez lancez l'application en interface de commande:
+>-  utilisez `mvn java:exec`
+>- Dans le pom.xml ,cherchez le plugin "exec-maven-plugin" puis dans le "mainClass" changez "com.epf.rentmanager.persistence.FillDatabase" par "com.epf.rentmanager.ui.UI"
 
 
 >## Difficultés 
